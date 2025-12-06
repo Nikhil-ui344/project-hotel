@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="footer-brand">
           <div className="logo">
             <Hotel className="logo-icon" />
-            <span>Grand Luxe</span>
+            <span>Komal Garden</span>
           </div>
           <p>
             Experience the height of luxury in the heart of the city. Where every detail is crafted for your comfort.
@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="footer-links">
             <p className="footer-contact-item"><MapPin className="footer-icon" /> 123 Residency Road, Bangalore, India</p>
             <p className="footer-contact-item"><Phone className="footer-icon" /> +91 80 1234 xxxx</p>
-            <p className="footer-contact-item"><Mail className="footer-icon" /> info@grandluxe.com</p>
+            <p className="footer-contact-item"><Mail className="footer-icon" /> info@komalgarden.com</p>
           </div>
         </div>
         <div>
@@ -39,7 +39,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2025 Grand Luxe Hotel. All rights reserved.</p>
+        <p>© 2025 Komal Garden. All rights reserved.</p>
       </div>
     </footer>
   )

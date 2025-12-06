@@ -28,7 +28,7 @@ const Navbar = () => {
         >
           <Hotel size={32} />
           <span>
-            Grand Luxe
+            Komal Garden
           </span>
         </button>
 

@@ -1,7 +1,7 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, Star, ChevronLeft, Quote, X } from 'lucide-react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
 
@@ -9,6 +9,7 @@ const LandingPage = () => {
   const navigate = useNavigate()
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const [galleryImages, setGalleryImages] = useState([])
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -18,53 +19,29 @@ const LandingPage = () => {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
-  const galleryImages = [
-    { src: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80', category: 'Exterior' },
-    { src: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80', category: 'Rooms' },
-    { src: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80', category: 'Dining' },
-    { src: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80', category: 'Lobby' },
-    { src: 'https://images.unsplash.com/photo-1571896349842-6e53ce41e887?w=800&q=80', category: 'Pool' }
-  ]
-
-  const categoryPhotos = {
-    'Exterior': [
-      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80',
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80',
-      'https://images.unsplash.com/photo-1512918760383-56199323c0c5?w=800&q=80'
-    ],
-    'Rooms': [
-      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
-      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
-      'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80',
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80'
-    ],
-    'Dining': [
-      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
-      'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80',
-      'https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?w=800&q=80',
-      'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80'
-    ],
-    'Lobby': [
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
-      'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80'
-    ],
-    'Pool': [
-      'https://images.unsplash.com/photo-1571896349842-6e53ce41e887?w=800&q=80',
-      'https://images.unsplash.com/photo-1572331165267-854da2b00ca1?w=800&q=80',
-      'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80'
-    ]
-  }
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then(res => res.json())
+      .then(data => {
+        const formattedImages = data.map(img => ({
+          src: img.imageUrl,
+          category: img.category
+        }))
+        setGalleryImages(formattedImages)
+      })
+      .catch(err => console.error("Failed to fetch gallery images", err))
+  }, [])
 
   const getRelatedPhotos = (category) => {
-    return categoryPhotos[category] || []
+    return galleryImages
+      .filter(img => img.category === category)
+      .map(img => img.src)
   }
 
   const testimonials = [
     { name: "Sarah Jenkins", text: "An absolutely unforgettable stay. The attention to detail is unmatched." },
     { name: "Michael Chen", text: "The perfect blend of modern luxury and classic hospitality." },
-    { name: "Emma Thompson", text: "Dining at Grand Luxe was a culinary journey I'll never forget." },
+    { name: "Emma Thompson", text: "Dining at Komal Garden was a culinary journey I'll never forget." },
     { name: "James Wilson", text: "The presidential suite exceeded all my expectations. Truly world-class." },
     { name: "Sofia Rodriguez", text: "A sanctuary in the city. The spa treatments were divine." }
   ]
@@ -122,7 +99,7 @@ const LandingPage = () => {
               boxShadow: '0 0 30px rgba(212, 168, 70, 0.6)'
             }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/rooms')}
+            onClick={() => window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
             className="btn-primary"
           >
             <span>Book Now</span>
@@ -208,31 +185,35 @@ const LandingPage = () => {
             <h2 className="section-title">
               A Glimpse of Luxury
             </h2>
-            <p className="section-subtitle">Immerse yourself in the Grand Luxe experience</p>
+            <p className="section-subtitle">Immerse yourself in the Komal Garden experience</p>
           </motion.div>
 
           <div className="gallery-grid">
-             {galleryImages.map((img, i) => (
-               <motion.div 
-                 key={i}
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true }}
-                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                 whileHover={{ scale: 1.02 }}
-                 onClick={() => setSelectedCategory(img.category)}
-                 className={`gallery-item ${
-                   i === 0 ? 'large' : 
-                   i === 3 ? 'wide' : ''
-                 }`}
-               >
-                 <div className="gallery-overlay"></div>
-                 <img src={img.src} alt={img.category} className="gallery-img" />
-                 <div className="gallery-card-info">
-                    <span className="gallery-card-category">{img.category}</span>
-                 </div>
-               </motion.div>
-             ))}
+             {/* Show unique categories */}
+             {Array.from(new Set(galleryImages.map(img => img.category))).slice(0, 5).map((category, i) => {
+               const img = galleryImages.find(image => image.category === category);
+               return (
+                 <motion.div 
+                   key={i}
+                   initial={{ opacity: 0, scale: 0.9 }}
+                   whileInView={{ opacity: 1, scale: 1 }}
+                   viewport={{ once: true }}
+                   transition={{ duration: 0.5, delay: i * 0.1 }}
+                   whileHover={{ scale: 1.02 }}
+                   onClick={() => setSelectedCategory(category)}
+                   className={`gallery-item ${
+                     i === 0 ? 'large' : 
+                     i === 3 ? 'wide' : ''
+                   }`}
+                 >
+                   <div className="gallery-overlay"></div>
+                   <img src={img.src} alt={category} className="gallery-img" />
+                   <div className="gallery-card-info">
+                      <span className="gallery-card-category">{category}</span>
+                   </div>
+                 </motion.div>
+               );
+             })}
           </div>
         </div>
       </section>

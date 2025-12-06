@@ -68,7 +68,7 @@ const SplashScreen = () => {
         {/* Text Animation */}
         <div className="splash-text-container">
           <motion.h1 className="splash-title" variants={itemVariants}>
-            <span className="text-gradient">Grand Luxe</span>
+            <span className="text-gradient">Komal Garden</span>
           </motion.h1>
           <motion.div 
             className="splash-divider"

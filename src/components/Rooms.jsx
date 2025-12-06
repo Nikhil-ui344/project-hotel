@@ -1,65 +1,36 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronRight, Wifi, Coffee, Tv, Wind } from 'lucide-react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
 
 const Rooms = () => {
-  const rooms = [
-    { 
-      id: 1,
-      title: 'Deluxe King', 
-      price: '$350/night', 
-      size: '45m²',
-      view: 'City View',
-      img: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
-      desc: 'Experience ultimate comfort in our Deluxe King room, featuring a plush king-size bed, modern amenities, and stunning city views.'
-    },
-    { 
-      id: 2,
-      title: 'Executive Suite', 
-      price: '$550/night', 
-      size: '65m²',
-      view: 'Ocean View',
-      img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
-      desc: 'Perfect for business or leisure, the Executive Suite offers a separate living area, premium workspace, and exclusive lounge access.'
-    },
-    { 
-      id: 3,
-      title: 'Presidential Penthouse', 
-      price: '$1,200/night', 
-      size: '120m²',
-      view: 'Panoramic View',
-      img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
-      desc: 'The epitome of luxury living. Our Presidential Penthouse features a private terrace, jacuzzi, butler service, and unmatched elegance.'
-    },
-    { 
-      id: 4,
-      title: 'Garden Villa', 
-      price: '$850/night', 
-      size: '90m²',
-      view: 'Garden View',
-      img: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
-      desc: 'A private sanctuary surrounded by lush tropical gardens. Features a private pool, outdoor rain shower, and serene atmosphere.'
-    },
-    { 
-      id: 5,
-      title: 'Family Suite', 
-      price: '$650/night', 
-      size: '80m²',
-      view: 'Pool View',
-      img: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80',
-      desc: 'Spacious accommodation for the whole family. Includes two bedrooms, a large living area, and kid-friendly amenities.'
-    },
-    { 
-      id: 6,
-      title: 'Oceanfront King', 
-      price: '$450/night', 
-      size: '50m²',
-      view: 'Ocean Front',
-      img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
-      desc: 'Wake up to the sound of waves. This room offers direct beach access and a private balcony overlooking the ocean.'
-    }
-  ]
+  const [rooms, setRooms] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/rooms')
+      .then(res => res.json())
+      .then(data => {
+        // Transform backend data to match component structure
+        const formattedRooms = data.map(room => ({
+          id: room._id,
+          title: room.title,
+          price: room.price,
+          size: room.size,
+          view: room.view,
+          img: room.imageUrl,
+          desc: room.description,
+          isAvailable: room.isAvailable
+        }))
+        setRooms(formattedRooms)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error("Failed to fetch rooms", err)
+        setLoading(false)
+      })
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -110,45 +81,60 @@ const Rooms = () => {
       {/* Rooms Grid */}
       <div className="section">
         <div className="container">
-          <motion.div 
-            className="rooms-grid"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            {rooms.map((room) => (
-              <motion.div
-                key={room.id}
-                variants={itemVariants}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="room-card"
-              >
-                <div className="room-image-container">
-                  <img src={room.img} alt={room.title} className="room-image" />
-                  <div className="room-badge">
-                    {room.size}
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-brown"></div>
+            </div>
+          ) : (
+            <motion.div 
+              className="rooms-grid"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              {rooms.map((room) => (
+                <motion.div
+                  key={room.id}
+                  variants={itemVariants}
+                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                  className="room-card"
+                >
+                  <div className="room-image-container">
+                    <img src={room.img} alt={room.title} className="room-image" />
+                    <div className="room-badge">
+                      {room.size}
+                    </div>
+                    {!room.isAvailable && (
+                      <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold z-10">
+                        Booked
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="room-content">
-                  <div className="room-header">
-                    <h3 className="room-title">{room.title}</h3>
-                    <span className="room-price">{room.price}</span>
+                  <div className="room-content">
+                    <div className="room-header">
+                      <h3 className="room-title">{room.title}</h3>
+                      <span className="room-price">{room.price}</span>
+                    </div>
+                    <p className="room-desc">{room.desc}</p>
+                    <div className="room-amenities">
+                      <Wifi className="amenity-icon" />
+                      <Coffee className="amenity-icon" />
+                      <Tv className="amenity-icon" />
+                      <Wind className="amenity-icon" />
+                    </div>
+                    <button 
+                      className={`btn-full ${!room.isAvailable ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={!room.isAvailable}
+                      onClick={() => window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
+                    >
+                      {room.isAvailable ? 'Book Now' : 'Currently Unavailable'}
+                    </button>
                   </div>
-                  <p className="room-desc">{room.desc}</p>
-                  <div className="room-amenities">
-                    <Wifi className="amenity-icon" />
-                    <Coffee className="amenity-icon" />
-                    <Tv className="amenity-icon" />
-                    <Wind className="amenity-icon" />
-                  </div>
-                  <button className="btn-full">
-                    Book Now
-                  </button>
-                </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-          </motion.div>
+          )}
         </div>
       </div>
 

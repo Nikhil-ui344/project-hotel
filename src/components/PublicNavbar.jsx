@@ -24,7 +24,7 @@ const PublicNavbar = () => {
       <div className="navbar-container">
         <Link to="/" className="logo">
           <Hotel className="logo-icon" />
-          <span>Grand Luxe</span>
+          <span>Komal Garden</span>
         </Link>
         
         {/* Desktop Menu */}
@@ -36,7 +36,7 @@ const PublicNavbar = () => {
           <Link to="/contact" className="nav-link">Contact</Link>
         </div>
         <button 
-          onClick={() => navigate('/rooms')}
+          onClick={() => window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
           className="btn-book-now desktop-only"
         >
           Book Now
@@ -56,7 +56,10 @@ const PublicNavbar = () => {
           <button className="mobile-nav-link" onClick={() => handleNavigation('/contact')}>Contact</button>
           <button 
             className="btn-book-now mt-4"
-            onClick={() => handleNavigation('/rooms')}
+            onClick={() => {
+              window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank');
+              setIsOpen(false);
+            }}
           >
             Book Now
           </button>

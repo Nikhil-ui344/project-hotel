@@ -8,6 +8,8 @@ import Rooms from './components/Rooms'
 import Gallery from './components/Gallery'
 import About from './components/About'
 import Contact from './components/Contact'
+import WhatsAppButton from './components/WhatsAppButton'
+import AdminDashboard from './components/Admin/AdminDashboard'
 
 function App() {
   const [showSplash, setShowSplash] = useState(true)
@@ -26,6 +28,7 @@ function App() {
 
   return (
     <Router>
+      <WhatsAppButton />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/rooms" element={<Rooms />} />
@@ -34,6 +37,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<ServiceBooking />} />
         <Route path="/profile" element={<CustomerProfile />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
