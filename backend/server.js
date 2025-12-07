@@ -40,6 +40,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/komal_gar
 // Models
 const Gallery = require('./models/Gallery');
 const Room = require('./models/Room');
+const Review = require('./models/Review');
 
 // Routes
 
@@ -135,6 +136,51 @@ app.delete('/api/rooms/:id', async (req, res) => {
   try {
     await Room.findByIdAndDelete(req.params.id);
     res.json({ message: 'Room deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Review Routes
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/api/reviews', async (req, res) => {
+  try {
+    const review = new Review({
+      name: req.body.name,
+      email: req.body.email,
+      rating: req.body.rating,
+      comment: req.body.comment,
+      isApproved: req.body.isApproved || false
+    });
+
+    const newReview = await review.save();
+    res.status(201).json(newReview);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.put('/api/reviews/:id', async (req, res) => {
+  try {
+    const updatedReview = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedReview);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.delete('/api/reviews/:id', async (req, res) => {
+  try {
+    await Review.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Review deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

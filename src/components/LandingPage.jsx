@@ -10,6 +10,9 @@ const LandingPage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [galleryImages, setGalleryImages] = useState([])
+  const [rooms, setRooms] = useState([])
+  const [roomsLoading, setRoomsLoading] = useState(true)
+  const [testimonials, setTestimonials] = useState([])
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -20,6 +23,7 @@ const LandingPage = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   useEffect(() => {
+    // Fetch gallery images
     fetch('/api/gallery')
       .then(res => res.json())
       .then(data => {
@@ -30,6 +34,41 @@ const LandingPage = () => {
         setGalleryImages(formattedImages)
       })
       .catch(err => console.error("Failed to fetch gallery images", err))
+
+    // Fetch rooms
+    fetch('/api/rooms')
+      .then(res => res.json())
+      .then(data => {
+        const formattedRooms = data.map(room => ({
+          id: room._id,
+          title: room.title,
+          price: room.price,
+          img: room.imageUrl,
+          desc: room.description,
+          isAvailable: room.isAvailable
+        }))
+        setRooms(formattedRooms)
+        setRoomsLoading(false)
+      })
+      .catch(err => {
+        console.error("Failed to fetch rooms", err)
+        setRoomsLoading(false)
+      })
+
+    // Fetch reviews (only approved ones)
+    fetch('/api/reviews')
+      .then(res => res.json())
+      .then(data => {
+        const approvedReviews = data
+          .filter(review => review.isApproved)
+          .map(review => ({
+            name: review.name,
+            text: review.comment,
+            rating: review.rating
+          }))
+        setTestimonials(approvedReviews)
+      })
+      .catch(err => console.error("Failed to fetch reviews", err))
   }, [])
 
   const getRelatedPhotos = (category) => {
@@ -37,14 +76,6 @@ const LandingPage = () => {
       .filter(img => img.category === category)
       .map(img => img.src)
   }
-
-  const testimonials = [
-    { name: "Sarah Jenkins", text: "An absolutely unforgettable stay. The attention to detail is unmatched." },
-    { name: "Michael Chen", text: "The perfect blend of modern luxury and classic hospitality." },
-    { name: "Emma Thompson", text: "Dining at Komal Garden was a culinary journey I'll never forget." },
-    { name: "James Wilson", text: "The presidential suite exceeded all my expectations. Truly world-class." },
-    { name: "Sofia Rodriguez", text: "A sanctuary in the city. The spa treatments were divine." }
-  ]
 
   const nextTestimonial = () => {
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
@@ -139,37 +170,60 @@ const LandingPage = () => {
             </p>
           </motion.div>
           
-          <div className="rooms-grid">
-            {[
-              { title: 'Deluxe King', price: '$350/night', img: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80' },
-              { title: 'Executive Suite', price: '$550/night', img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80' },
-              { title: 'Presidential Penthouse', price: '$1,200/night', img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80' },
-            ].map((room, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                whileHover={{ y: -10 }}
-                onClick={() => navigate('/rooms')}
-                className="room-card"
-              >
-                <div className="room-image-container">
-                  <img src={room.img} alt={room.title} className="room-image" />
-                </div>
-                <div className="room-content">
-                  <h3 className="room-title">{room.title}</h3>
-                  <div className="room-footer">
-                    <p className="room-price">{room.price}</p>
-                    <button className="btn-text">
-                      View Details <ChevronRight size={16} className="ml-1" />
-                    </button>
+          {roomsLoading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-brown"></div>
+            </div>
+          ) : (
+            <div className="rooms-grid">
+              {rooms.slice(0, 3).map((room, index) => (
+                <motion.div
+                  key={room.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  whileHover={{ y: -10 }}
+                  onClick={() => navigate('/rooms')}
+                  className="room-card"
+                >
+                  <div className="room-image-container">
+                    <img 
+                      src={room.img.startsWith('http') ? room.img : `${window.location.origin}${room.img}`} 
+                      alt={room.title} 
+                      className="room-image" 
+                    />
+                    {!room.isAvailable && (
+                      <div className="room-badge-unavailable">Booked</div>
+                    )}
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  <div className="room-content">
+                    <h3 className="room-title">{room.title}</h3>
+                    <p className="room-description">{room.desc?.substring(0, 80)}...</p>
+                    <div className="room-footer">
+                      <p className="room-price">{room.price}</p>
+                      <button className="btn-text">
+                        View Details <ChevronRight size={16} className="ml-1" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+          
+          {!roomsLoading && rooms.length > 3 && (
+            <div className="text-center mt-8">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/rooms')}
+                className="btn-secondary"
+              >
+                View All Rooms <ChevronRight size={20} className="ml-2" />
+              </motion.button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -288,7 +342,7 @@ const LandingPage = () => {
             <p className="about-text">
               Founded in 1920, Grand Luxe has been the epitome of elegance and hospitality for over a century. Nestled in the heart of the city, we offer an escape into a world of refined luxury and timeless charm. Our commitment to excellence ensures that every guest experiences the royal treatment they deserve.
             </p>
-            <button className="btn-text">
+            <button className="btn-text" onClick={() => navigate('/about')}>
               Read More <ChevronRight size={16} className="ml-1" />
             </button>
           </motion.div>
@@ -314,32 +368,45 @@ const LandingPage = () => {
           </motion.h2>
           
           <div className="testimonial-slider-container">
-            <button className="slider-btn prev" onClick={prevTestimonial}>
+            <button className="slider-btn prev" onClick={prevTestimonial} disabled={testimonials.length === 0}>
               <ChevronLeft size={24} />
             </button>
             
             <div style={{ overflow: 'hidden', minHeight: '300px', display: 'flex', alignItems: 'center' }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentTestimonial}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={{ duration: 0.5 }}
-                  className="testimonial-slide"
-                  style={{ width: '100%' }}
-                >
-                  <Quote size={48} className="testimonial-quote-icon mx-auto" />
-                  <div className="testimonial-stars mb-6 flex justify-center gap-1">
-                    {[...Array(5)].map((_, star) => <Star key={star} size={20} fill="#D4A846" color="#D4A846" />)}
-                  </div>
-                  <p className="testimonial-text-large">"{testimonials[currentTestimonial].text}"</p>
-                  <h4 className="testimonial-author-large">{testimonials[currentTestimonial].name}</h4>
-                </motion.div>
-              </AnimatePresence>
+              {testimonials.length === 0 ? (
+                <div className="text-center w-100">
+                  <p className="testimonial-text-large text-white-50">No reviews yet. Be the first to share your experience!</p>
+                </div>
+              ) : (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentTestimonial}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.5 }}
+                    className="testimonial-slide"
+                    style={{ width: '100%' }}
+                  >
+                    <Quote size={48} className="testimonial-quote-icon mx-auto" />
+                    <div className="testimonial-stars mb-6 flex justify-center gap-1">
+                      {[...Array(5)].map((_, star) => (
+                        <Star 
+                          key={star} 
+                          size={20} 
+                          fill={star < testimonials[currentTestimonial].rating ? "#D4A846" : "transparent"} 
+                          color="#D4A846" 
+                        />
+                      ))}
+                    </div>
+                    <p className="testimonial-text-large">"{testimonials[currentTestimonial].text}"</p>
+                    <h4 className="testimonial-author-large">{testimonials[currentTestimonial].name}</h4>
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </div>
 
-            <button className="slider-btn next" onClick={nextTestimonial}>
+            <button className="slider-btn next" onClick={nextTestimonial} disabled={testimonials.length === 0}>
               <ChevronRight size={24} />
             </button>
 
