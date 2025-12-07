@@ -8,6 +8,7 @@ import Rooms from './components/Rooms'
 import Gallery from './components/Gallery'
 import About from './components/About'
 import Contact from './components/Contact'
+import PartyHall from './components/PartyHall'
 import WhatsAppButton from './components/WhatsAppButton'
 import AdminDashboard from './components/Admin/AdminDashboard'
 import Login from './components/Admin/Login'
@@ -38,6 +39,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<ServiceBooking />} />
+        <Route path="/party-hall" element={<PartyHall />} />
         <Route path="/profile" element={<CustomerProfile />} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={

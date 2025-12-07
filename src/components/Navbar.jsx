@@ -36,6 +36,7 @@ const Navbar = () => {
         <div className="navbar-links">
           <button onClick={() => navigate('/')}>Home</button>
           <button onClick={() => navigate('/services')}>Services</button>
+          <button onClick={() => navigate('/party-hall')}>Party Hall</button>
           <button onClick={() => navigate('/profile')}>Profile</button>
         </div>
 
@@ -44,10 +45,14 @@ const Navbar = () => {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
+        {/* Mobile Menu Backdrop */}
+        {isOpen && <div className="mobile-menu-backdrop" onClick={() => setIsOpen(false)} />}
+
         {/* Mobile Menu Overlay */}
         <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/')}>Home</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/services')}>Services</button>
+          <button className="mobile-nav-link" onClick={() => handleNavigation('/party-hall')}>Party Hall</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/profile')}>Profile</button>
         </div>
       </div>
