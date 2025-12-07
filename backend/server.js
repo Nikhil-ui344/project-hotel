@@ -1,10 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 require('dotenv').config();
+
+// Import Cloudinary configuration
+const { uploadRoom, uploadGallery, cloudinary } = require('./config/cloudinary');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,25 +12,6 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
-
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)){
-    fs.mkdirSync(uploadDir);
-}
-
-// Multer Configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads'))
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-});
-
-const upload = multer({ storage: storage });
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/komal_garden_db')
@@ -54,9 +35,20 @@ app.get('/api/gallery', async (req, res) => {
   }
 });
 
-app.post('/api/gallery', upload.single('image'), async (req, res) => {
+app.post('/api/gallery', uploadGallery.single('image'), async (req, res) => {
+  console.log('POST /api/gallery request received');
+  console.log('Body:', req.body);
+  console.log('File:', req.file);
+  
   try {
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : req.body.imageUrl;
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image file provided' });
+    }
+    
+    // Cloudinary URL is available in req.file.path
+    const imageUrl = req.file.path;
+    
+    console.log('Cloudinary URL:', imageUrl);
     
     const photo = new Gallery({
       imageUrl: imageUrl,
@@ -65,14 +57,30 @@ app.post('/api/gallery', upload.single('image'), async (req, res) => {
     });
 
     const newPhoto = await photo.save();
+    console.log('Photo saved successfully:', newPhoto);
     res.status(201).json(newPhoto);
   } catch (err) {
+    console.error('Error saving photo:', err);
     res.status(400).json({ message: err.message });
   }
 });
 
 app.delete('/api/gallery/:id', async (req, res) => {
   try {
+    const photo = await Gallery.findById(req.params.id);
+    if (photo && photo.imageUrl) {
+      // Extract public_id from Cloudinary URL and delete from Cloudinary
+      const urlParts = photo.imageUrl.split('/');
+      const publicIdWithExt = urlParts.slice(-2).join('/');
+      const publicId = publicIdWithExt.split('.')[0];
+      
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (cloudinaryErr) {
+        console.log('Cloudinary delete error:', cloudinaryErr);
+      }
+    }
+    
     await Gallery.findByIdAndDelete(req.params.id);
     res.json({ message: 'Photo deleted' });
   } catch (err) {
@@ -90,13 +98,14 @@ app.get('/api/rooms', async (req, res) => {
   }
 });
 
-app.post('/api/rooms', upload.single('image'), async (req, res) => {
+app.post('/api/rooms', uploadRoom.single('image'), async (req, res) => {
   console.log('POST /api/rooms request received');
   console.log('Body:', req.body);
   console.log('File:', req.file);
 
   try {
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : req.body.imageUrl;
+    // Cloudinary URL is available in req.file.path
+    const imageUrl = req.file ? req.file.path : req.body.imageUrl;
     
     if (!imageUrl) {
       console.log('Error: No image URL provided');
@@ -134,6 +143,20 @@ app.put('/api/rooms/:id', async (req, res) => {
 
 app.delete('/api/rooms/:id', async (req, res) => {
   try {
+    const room = await Room.findById(req.params.id);
+    if (room && room.imageUrl) {
+      // Extract public_id from Cloudinary URL and delete from Cloudinary
+      const urlParts = room.imageUrl.split('/');
+      const publicIdWithExt = urlParts.slice(-2).join('/');
+      const publicId = publicIdWithExt.split('.')[0];
+      
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (cloudinaryErr) {
+        console.log('Cloudinary delete error:', cloudinaryErr);
+      }
+    }
+    
     await Room.findByIdAndDelete(req.params.id);
     res.json({ message: 'Room deleted' });
   } catch (err) {
@@ -186,6 +209,20 @@ app.delete('/api/reviews/:id', async (req, res) => {
   }
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ 
+    message: err.message || 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log('Environment variables loaded:');
+  console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
+  console.log('- CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME || 'Not set');
+  console.log('- CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? 'Set' : 'Not set');
+  console.log('- CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? 'Set' : 'Not set');
 });

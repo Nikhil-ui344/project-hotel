@@ -1,0 +1,4 @@
+# Backend .env template
+node_modules/
+.env
+uploads/
