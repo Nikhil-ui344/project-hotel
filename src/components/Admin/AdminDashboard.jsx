@@ -1303,7 +1303,7 @@ const ReviewsManager = () => {
       const url = editingReview ? `${API_URL}/api/reviews/${editingReview._id}` : `${API_URL}/api/reviews`;
       const method = editingReview ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -1333,7 +1333,7 @@ const ReviewsManager = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
+      const response = await authFetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'DELETE'
       });
 
@@ -1351,7 +1351,7 @@ const ReviewsManager = () => {
 
   const handleApprove = async (reviewId, currentStatus) => {
     try {
-      const response = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
+      const response = await authFetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isApproved: !currentStatus })
