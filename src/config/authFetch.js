@@ -17,7 +17,8 @@ export const authFetch = async (url, options = {}) => {
     headers['Content-Type'] = 'application/json';
   }
 
-  const response = await fetch(`${API_URL}${url}`, {
+  // Use the URL as-is (it already includes API_URL)
+  const response = await fetch(url, {
     ...options,
     headers
   });
