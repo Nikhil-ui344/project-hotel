@@ -6,6 +6,10 @@ require('dotenv').config();
 // Import Cloudinary configuration
 const { uploadRoom, uploadGallery, cloudinary } = require('./config/cloudinary');
 
+// Import auth middleware and routes
+const authMiddleware = require('./middleware/auth');
+const authRoutes = require('./routes/auth');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -23,6 +27,9 @@ const Gallery = require('./models/Gallery');
 const Room = require('./models/Room');
 const Review = require('./models/Review');
 
+// Auth Routes (public - no middleware)
+app.use('/api/auth', authRoutes);
+
 // Routes
 
 // Gallery Routes
@@ -35,7 +42,7 @@ app.get('/api/gallery', async (req, res) => {
   }
 });
 
-app.post('/api/gallery', uploadGallery.single('image'), async (req, res) => {
+app.post('/api/gallery', authMiddleware, uploadGallery.single('image'), async (req, res) => {
   console.log('POST /api/gallery request received');
   console.log('Body:', req.body);
   console.log('File:', req.file);
@@ -65,7 +72,7 @@ app.post('/api/gallery', uploadGallery.single('image'), async (req, res) => {
   }
 });
 
-app.delete('/api/gallery/:id', async (req, res) => {
+app.delete('/api/gallery/:id', authMiddleware, async (req, res) => {
   try {
     const photo = await Gallery.findById(req.params.id);
     if (photo && photo.imageUrl) {
@@ -98,7 +105,7 @@ app.get('/api/rooms', async (req, res) => {
   }
 });
 
-app.post('/api/rooms', uploadRoom.single('image'), async (req, res) => {
+app.post('/api/rooms', authMiddleware, uploadRoom.single('image'), async (req, res) => {
   console.log('POST /api/rooms request received');
   console.log('Body:', req.body);
   console.log('File:', req.file);
@@ -132,7 +139,7 @@ app.post('/api/rooms', uploadRoom.single('image'), async (req, res) => {
   }
 });
 
-app.put('/api/rooms/:id', async (req, res) => {
+app.put('/api/rooms/:id', authMiddleware, async (req, res) => {
   try {
     const updatedRoom = await Room.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updatedRoom);
@@ -141,7 +148,7 @@ app.put('/api/rooms/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/rooms/:id', async (req, res) => {
+app.delete('/api/rooms/:id', authMiddleware, async (req, res) => {
   try {
     const room = await Room.findById(req.params.id);
     if (room && room.imageUrl) {
@@ -174,7 +181,7 @@ app.get('/api/reviews', async (req, res) => {
   }
 });
 
-app.post('/api/reviews', async (req, res) => {
+app.post('/api/reviews', authMiddleware, async (req, res) => {
   try {
     const review = new Review({
       name: req.body.name,
@@ -191,7 +198,7 @@ app.post('/api/reviews', async (req, res) => {
   }
 });
 
-app.put('/api/reviews/:id', async (req, res) => {
+app.put('/api/reviews/:id', authMiddleware, async (req, res) => {
   try {
     const updatedReview = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updatedReview);
@@ -200,7 +207,7 @@ app.put('/api/reviews/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/reviews/:id', async (req, res) => {
+app.delete('/api/reviews/:id', authMiddleware, async (req, res) => {
   try {
     await Review.findByIdAndDelete(req.params.id);
     res.json({ message: 'Review deleted' });
