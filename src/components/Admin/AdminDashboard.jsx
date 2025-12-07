@@ -263,7 +263,7 @@ const GalleryManager = () => {
       formData.append('category', category);
       formData.append('description', description);
 
-      const response = await fetch(`${API_URL}/api/gallery`, {
+      const response = await authFetch(`${API_URL}/api/gallery`, {
         method: 'POST',
         body: formData
       });
@@ -606,7 +606,7 @@ const RoomManager = () => {
         submitData.append('isAvailable', formData.isAvailable);
         submitData.append('amenities', JSON.stringify(formData.amenities));
 
-        const response = await fetch(`${API_URL}/api/rooms`, {
+        const response = await authFetch(`${API_URL}/api/rooms`, {
           method: 'POST',
           body: submitData
         });
