@@ -298,7 +298,7 @@ const GalleryManager = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/gallery/${photoId}`, {
+      const response = await authFetch(`${API_URL}/api/gallery/${photoId}`, {
         method: 'DELETE'
       });
 
@@ -634,7 +634,7 @@ const RoomManager = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/rooms/${roomId}`, {
+      const response = await authFetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'DELETE'
       });
 
@@ -652,7 +652,7 @@ const RoomManager = () => {
 
   const handleToggleAvailability = async (roomId, currentStatus) => {
     try {
-      const response = await fetch(`${API_URL}/api/rooms/${roomId}`, {
+      const response = await authFetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
