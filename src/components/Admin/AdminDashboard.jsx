@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config/api';
+import { authFetch } from '../../config/authFetch';
 import { Container, Row, Col, Card, Button, Form, Modal, Badge, ProgressBar, Dropdown, Alert, ButtonGroup, Offcanvas, ListGroup } from 'react-bootstrap';
 import { 
   FaChartLine, FaImage, FaBed, FaCog, FaBars, FaSignOutAlt, FaPlus, FaUpload, 
   FaTimes, FaCheck, FaEdit, FaTrash, FaShieldAlt, FaChartBar, FaWifi, FaCoffee, 
   FaTv, FaWind, FaDollarSign, FaUsers, FaCalendar, FaEye, FaStar, FaHeart,
   FaFilter, FaSearch, FaDownload, FaBell, FaUserCircle, FaSortAmountDown,
-  FaExpand, FaMapMarkerAlt, FaConciergeBell, FaClipboardList, FaCloudUploadAlt
+  FaExpand, FaMapMarkerAlt, FaConciergeBell, FaClipboardList, FaCloudUploadAlt,
+  FaEnvelope
 } from 'react-icons/fa';
 import {
   LayoutDashboard,
@@ -44,10 +47,19 @@ const NAV_ITEMS = [
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('Enhanced AdminDashboard loaded');
   }, []);
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      navigate('/admin/login');
+    }
+  };
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)' }}>
@@ -86,7 +98,9 @@ const AdminDashboard = () => {
                   <Dropdown.Item><FaUserCircle className="me-2" />Profile</Dropdown.Item>
                   <Dropdown.Item><FaCog className="me-2" />Settings</Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item className="text-danger"><FaSignOutAlt className="me-2" />Logout</Dropdown.Item>
+                  <Dropdown.Item className="text-danger" onClick={handleLogout}>
+                    <FaSignOutAlt className="me-2" />Logout
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
@@ -1594,7 +1608,148 @@ const ReviewsManager = () => {
 };
 
 // ==================== SETTINGS PANEL ====================
-const SettingsPanel = () => {
+  const SettingsPanel = () => {
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    // Email change states
+    const [emailPassword, setEmailPassword] = useState('');
+    const [newEmail, setNewEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [emailSuccess, setEmailSuccess] = useState('');
+    const [emailLoading, setEmailLoading] = useState(false);  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    // Validation
+    if (newPassword.length < 8) {
+      setPasswordError('New password must be at least 8 characters long');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('adminToken');
+      const admin = JSON.parse(localStorage.getItem('admin') || '{}');
+
+      // First, verify current password by attempting login
+      const loginResponse = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: admin.email,
+          password: currentPassword
+        })
+      });
+
+      if (!loginResponse.ok) {
+        setPasswordError('Current password is incorrect');
+        return;
+      }
+
+      // Update password
+      const updateResponse = await authFetch(`/api/auth/change-password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword
+        })
+      });
+
+      if (updateResponse.ok) {
+        setPasswordSuccess('Password changed successfully! Please login again.');
+        setTimeout(() => {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('admin');
+          window.location.href = '/admin/login';
+        }, 2000);
+      } else {
+        const error = await updateResponse.json();
+        setPasswordError(error.message || 'Failed to change password');
+      }
+    } catch (error) {
+      setPasswordError('Failed to change password. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChangeEmail = async (e) => {
+    e.preventDefault();
+    setEmailError('');
+    setEmailSuccess('');
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setEmailLoading(true);
+      const admin = JSON.parse(localStorage.getItem('admin') || '{}');
+
+      console.log('Attempting to verify with email:', admin.email);
+
+      // First, verify current password by attempting login
+      const loginResponse = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: admin.email,
+          password: emailPassword
+        })
+      });
+
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json();
+        console.error('Login failed:', errorData);
+        setEmailError('Current password is incorrect');
+        setEmailLoading(false);
+        return;
+      }
+
+      // Update email
+      const updateResponse = await authFetch(`/api/auth/change-email`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentPassword: emailPassword,
+          newEmail
+        })
+      });
+
+      if (updateResponse.ok) {
+        const data = await updateResponse.json();
+        setEmailSuccess('Email changed successfully! Please login again with your new email.');
+        setTimeout(() => {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('admin');
+          window.location.href = '/admin/login';
+        }, 2000);
+      } else {
+        const error = await updateResponse.json();
+        setEmailError(error.message || 'Failed to change email');
+      }
+    } catch (error) {
+      setEmailError('Failed to change email. Please try again.');
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
   return (
     <Container fluid>
       <Card className="border-0 shadow-sm" style={{ borderRadius: '20px' }}>
@@ -1602,6 +1757,174 @@ const SettingsPanel = () => {
           <h3 className="fw-bold mb-4">Settings & Configuration</h3>
           
           <Row className="g-4">
+            {/* Change Password Section */}
+            <Col lg={6}>
+              <Card className="border h-100" style={{ borderRadius: '16px' }}>
+                <Card.Body className="p-4">
+                  <div className="d-flex align-items-center gap-3 mb-4">
+                    <div className="rounded-3 p-3" style={{ background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)' }}>
+                      <FaShieldAlt size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1">Change Password</h5>
+                      <small className="text-muted">Update your admin credentials</small>
+                    </div>
+                  </div>
+
+                  {passwordError && (
+                    <Alert variant="danger" dismissible onClose={() => setPasswordError('')}>
+                      {passwordError}
+                    </Alert>
+                  )}
+
+                  {passwordSuccess && (
+                    <Alert variant="success">
+                      {passwordSuccess}
+                    </Alert>
+                  )}
+
+                  <Form onSubmit={handleChangePassword}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Current Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="Enter current password"
+                        required
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Label>New Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Enter new password (min 8 characters)"
+                        required
+                      />
+                      <Form.Text className="text-muted">
+                        Password must be at least 8 characters long
+                      </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Label>Confirm New Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Re-enter new password"
+                        required
+                      />
+                    </Form.Group>
+
+                    <Button 
+                      type="submit" 
+                      className="w-100"
+                      disabled={loading}
+                      style={{
+                        background: loading ? undefined : 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                        border: 'none'
+                      }}
+                    >
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" />
+                          Changing Password...
+                        </>
+                      ) : (
+                        <>
+                          <FaCheck className="me-2" />
+                          Change Password
+                        </>
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col lg={6}>
+              <Card className="border h-100" style={{ borderRadius: '16px' }}>
+                <Card.Body className="p-4">
+                  <div className="d-flex align-items-center gap-3 mb-4">
+                    <div className="rounded-3 p-3" style={{ background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)' }}>
+                      <FaEnvelope size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1">Change Email</h5>
+                      <small className="text-muted">Update your login email address</small>
+                    </div>
+                  </div>
+
+                  {emailError && (
+                    <Alert variant="danger" dismissible onClose={() => setEmailError('')}>
+                      {emailError}
+                    </Alert>
+                  )}
+
+                  {emailSuccess && (
+                    <Alert variant="success" dismissible onClose={() => setEmailSuccess('')}>
+                      {emailSuccess}
+                    </Alert>
+                  )}
+
+                  <Form onSubmit={handleChangeEmail}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Current Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={emailPassword}
+                        onChange={(e) => setEmailPassword(e.target.value)}
+                        placeholder="Enter your password for verification"
+                        required
+                      />
+                      <Form.Text className="text-muted">
+                        Required to verify your identity
+                      </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Label>New Email Address</Form.Label>
+                      <Form.Control
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder="Enter new email address"
+                        required
+                      />
+                    </Form.Group>
+
+                    <Button 
+                      type="submit" 
+                      className="w-100"
+                      disabled={emailLoading}
+                      style={{
+                        background: emailLoading ? undefined : 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                        border: 'none'
+                      }}
+                    >
+                      {emailLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" />
+                          Changing Email...
+                        </>
+                      ) : (
+                        <>
+                          <FaCheck className="me-2" />
+                          Change Email
+                        </>
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          <Row className="g-4 mt-3">
             <Col lg={6}>
               <Card className="border h-100" style={{ borderRadius: '16px' }}>
                 <Card.Body className="p-4">

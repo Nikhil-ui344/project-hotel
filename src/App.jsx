@@ -10,6 +10,8 @@ import About from './components/About'
 import Contact from './components/Contact'
 import WhatsAppButton from './components/WhatsAppButton'
 import AdminDashboard from './components/Admin/AdminDashboard'
+import Login from './components/Admin/Login'
+import ProtectedRoute from './components/Admin/ProtectedRoute'
 
 function App() {
   const [showSplash, setShowSplash] = useState(true)
@@ -37,7 +39,12 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<ServiceBooking />} />
         <Route path="/profile" element={<CustomerProfile />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
