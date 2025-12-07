@@ -1,4 +1,4 @@
-import { Hotel, MapPin, Phone, Mail, Instagram, Facebook, Twitter } from 'lucide-react'
+import { Hotel, MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
 
 const Footer = () => {
   return (
@@ -24,9 +24,10 @@ const Footer = () => {
         <div>
           <h4 className="footer-heading">Follow Us</h4>
           <div className="social-links">
-            <a href="#" className="social-link"><Instagram size={20} /></a>
+            <a href="https://www.instagram.com/komal._.garden?igsh=MWpmZ2J5N3o4aHM5Yg==" target="_blank" rel="noopener noreferrer" className="social-link">
+              <Instagram size={20} />
+            </a>
             <a href="#" className="social-link"><Facebook size={20} /></a>
-            <a href="#" className="social-link"><Twitter size={20} /></a>
           </div>
         </div>
         <div>
@@ -40,6 +41,15 @@ const Footer = () => {
       </div>
       <div className="footer-bottom">
         <p>© 2025 Komal Garden. All rights reserved.</p>
+        <a 
+          href="https://www.instagram.com/codeyatraofficial?igsh=d3hrdXlrZDZleTF0" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="made-by-link"
+        >
+          <span>Made by</span>
+          <img src="/codeyatra.jpg" alt="CodeYatra" className="codeyatra-logo" />
+        </a>
       </div>
     </footer>
   )
