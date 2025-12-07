@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_URL from '../../config/api';
 import { Container, Row, Col, Card, Button, Form, Modal, Badge, ProgressBar, Dropdown, Alert, ButtonGroup, Offcanvas, ListGroup } from 'react-bootstrap';
 import { 
   FaChartLine, FaImage, FaBed, FaCog, FaBars, FaSignOutAlt, FaPlus, FaUpload, 
@@ -203,7 +204,7 @@ const GalleryManager = () => {
   const fetchPhotos = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/gallery');
+      const response = await fetch(`${API_URL}/api/gallery`);
       if (response.ok) {
         const data = await response.json();
         setPhotos(data);
@@ -248,7 +249,7 @@ const GalleryManager = () => {
       formData.append('category', category);
       formData.append('description', description);
 
-      const response = await fetch('/api/gallery', {
+      const response = await fetch(`${API_URL}/api/gallery`, {
         method: 'POST',
         body: formData
       });
@@ -283,7 +284,7 @@ const GalleryManager = () => {
     }
 
     try {
-      const response = await fetch(`/api/gallery/${photoId}`, {
+      const response = await fetch(`${API_URL}/api/gallery/${photoId}`, {
         method: 'DELETE'
       });
 
@@ -509,7 +510,7 @@ const RoomManager = () => {
   const fetchRooms = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/rooms');
+      const response = await fetch(`${API_URL}/api/rooms`);
       if (response.ok) {
         const data = await response.json();
         setRooms(data);
@@ -551,7 +552,7 @@ const RoomManager = () => {
       
       if (editingRoom) {
         // Update existing room (PUT - no file upload support in backend)
-        const response = await fetch(`/api/rooms/${editingRoom._id}`, {
+        const response = await fetch(`${API_URL}/api/rooms/${editingRoom._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -591,7 +592,7 @@ const RoomManager = () => {
         submitData.append('isAvailable', formData.isAvailable);
         submitData.append('amenities', JSON.stringify(formData.amenities));
 
-        const response = await fetch('/api/rooms', {
+        const response = await fetch(`${API_URL}/api/rooms`, {
           method: 'POST',
           body: submitData
         });
@@ -619,7 +620,7 @@ const RoomManager = () => {
     }
 
     try {
-      const response = await fetch(`/api/rooms/${roomId}`, {
+      const response = await fetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'DELETE'
       });
 
@@ -637,7 +638,7 @@ const RoomManager = () => {
 
   const handleToggleAvailability = async (roomId, currentStatus) => {
     try {
-      const response = await fetch(`/api/rooms/${roomId}`, {
+      const response = await fetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -998,9 +999,9 @@ const DashboardOverview = () => {
   const fetchStats = async () => {
     try {
       const [roomsRes, photosRes, reviewsRes] = await Promise.all([
-        fetch('/api/rooms'),
-        fetch('/api/gallery'),
-        fetch('/api/reviews')
+        fetch(`${API_URL}/api/rooms`),
+        fetch(`${API_URL}/api/gallery`),
+        fetch(`${API_URL}/api/reviews`)
       ]);
 
       if (roomsRes.ok && photosRes.ok && reviewsRes.ok) {
@@ -1269,7 +1270,7 @@ const ReviewsManager = () => {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/reviews');
+      const response = await fetch(`${API_URL}/api/reviews`);
       if (response.ok) {
         const data = await response.json();
         setReviews(data);
@@ -1285,7 +1286,7 @@ const ReviewsManager = () => {
     e.preventDefault();
     
     try {
-      const url = editingReview ? `/api/reviews/${editingReview._id}` : '/api/reviews';
+      const url = editingReview ? `${API_URL}/api/reviews/${editingReview._id}` : `${API_URL}/api/reviews`;
       const method = editingReview ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -1318,7 +1319,7 @@ const ReviewsManager = () => {
     }
 
     try {
-      const response = await fetch(`/api/reviews/${reviewId}`, {
+      const response = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'DELETE'
       });
 
@@ -1336,7 +1337,7 @@ const ReviewsManager = () => {
 
   const handleApprove = async (reviewId, currentStatus) => {
     try {
-      const response = await fetch(`/api/reviews/${reviewId}`, {
+      const response = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isApproved: !currentStatus })

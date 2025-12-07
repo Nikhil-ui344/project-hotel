@@ -3,13 +3,14 @@ import { motion } from 'framer-motion'
 import { ChevronRight, Wifi, Coffee, Tv, Wind } from 'lucide-react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
+import API_URL from '../config/api'
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/rooms')
+    fetch(`${API_URL}/api/rooms`)
       .then(res => res.json())
       .then(data => {
         // Transform backend data to match component structure

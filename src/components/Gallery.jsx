@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
+import API_URL from '../config/api'
 
 const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -10,7 +11,7 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/gallery')
+    fetch(`${API_URL}/api/gallery`)
       .then(res => res.json())
       .then(data => {
         // Transform backend data to match component structure if needed

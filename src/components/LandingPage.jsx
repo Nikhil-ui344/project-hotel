@@ -4,6 +4,7 @@ import { ChevronRight, Star, ChevronLeft, Quote, X } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
+import API_URL from '../config/api'
 
 const LandingPage = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     // Fetch gallery images
-    fetch('/api/gallery')
+    fetch(`${API_URL}/api/gallery`)
       .then(res => res.json())
       .then(data => {
         const formattedImages = data.map(img => ({
@@ -36,7 +37,7 @@ const LandingPage = () => {
       .catch(err => console.error("Failed to fetch gallery images", err))
 
     // Fetch rooms
-    fetch('/api/rooms')
+    fetch(`${API_URL}/api/rooms`)
       .then(res => res.json())
       .then(data => {
         const formattedRooms = data.map(room => ({
@@ -56,7 +57,7 @@ const LandingPage = () => {
       })
 
     // Fetch reviews (only approved ones)
-    fetch('/api/reviews')
+    fetch(`${API_URL}/api/reviews`)
       .then(res => res.json())
       .then(data => {
         const approvedReviews = data
