@@ -41,15 +41,6 @@ const Footer = () => {
       </div>
       <div className="footer-bottom">
         <p>© 2025 Komal Garden. All rights reserved.</p>
-        <a 
-          href="https://www.instagram.com/codeyatraofficial?igsh=d3hrdXlrZDZleTF0" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="made-by-link"
-        >
-          <span>Made by</span>
-          <img src="/codeyatra.jpg" alt="CodeYatra" className="codeyatra-logo" />
-        </a>
       </div>
     </footer>
   )

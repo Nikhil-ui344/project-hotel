@@ -5,10 +5,10 @@ import Footer from './Footer';
 
 const PartyHall = () => {
   const features = [
-    { icon: Users, title: 'Capacity', description: 'Up to 200 guests' },
-    { icon: Music, title: 'Sound System', description: 'Professional audio & DJ setup' },
-    { icon: Utensils, title: 'Catering', description: 'In-house & external options' },
-    { icon: Camera, title: 'Photography', description: 'Scenic photo opportunities' },
+    { icon: Users, title: 'Custom Event Setup', description: 'Flexible venue configuration' },
+    { icon: Music, title: 'Audio-Visual Equipment', description: 'Professional sound & visual systems' },
+    { icon: Users, title: 'On-Site Support Staff', description: 'Dedicated event assistance' },
+    { icon: Utensils, title: 'Catering Coordination', description: 'Full-service catering support' },
   ];
 
   const amenities = [
@@ -54,7 +54,7 @@ const PartyHall = () => {
   };
 
   const handleBookNow = () => {
-    const phoneNumber = '919742856923';
+    const phoneNumber = '919739122444';
     const message = encodeURIComponent('Hi, I would like to inquire about booking the Party Hall at Komal Garden for an event.');
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
@@ -79,7 +79,7 @@ const PartyHall = () => {
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="page-subtitle"
         >
-          Where Celebrations Come to Life - A sophisticated and versatile space for all your special occasions
+          Host unforgettable events in our stylish, flexible venue—perfect for weddings, parties, and meetings
         </motion.p>
       </div>
 

@@ -40,7 +40,7 @@ const Contact = () => {
                 </div>
                 <div className="contact-details">
                   <h3>Address</h3>
-                  <p>123 Residency Road, Bangalore<br />Karnataka 560025, India</p>
+                  <p>Chenduru (Thattihalli Cross)<br />Bangalore Hyderabad Road<br />Near Bagepalli, Chikkaballapura (D)</p>
                 </div>
               </div>
               <div className="contact-item">
@@ -49,7 +49,7 @@ const Contact = () => {
                 </div>
                 <div className="contact-details">
                   <h3>Phone</h3>
-                  <p>+91 80 1234 xxxx<br />+91 80 8765 xxxx</p>
+                  <p>+91 97391 22444<br />+91 70191 99999</p>
                 </div>
               </div>
               <div className="contact-item">

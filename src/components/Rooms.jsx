@@ -127,7 +127,7 @@ const Rooms = () => {
                     <button 
                       className={`btn-full ${!room.isAvailable ? 'opacity-50 cursor-not-allowed' : ''}`}
                       disabled={!room.isAvailable}
-                      onClick={() => window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
+                      onClick={() => window.open('https://wa.me/919739122444?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
                     >
                       {room.isAvailable ? 'Book Now' : 'Currently Unavailable'}
                     </button>

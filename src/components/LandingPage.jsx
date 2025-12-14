@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { ChevronRight, Star, ChevronLeft, Quote, X } from 'lucide-react'
+import { ChevronRight, Star, ChevronLeft, Quote, X, Utensils, ChefHat, Coffee, Award } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
@@ -131,7 +131,7 @@ const LandingPage = () => {
               boxShadow: '0 0 30px rgba(212, 168, 70, 0.6)'
             }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.open('https://wa.me/919742856923?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
+            onClick={() => window.open('https://wa.me/919739122444?text=Hello,%20I%20would%20like%20to%20book%20a%20room%20at%20Komal%20Garden.', '_blank')}
             className="btn-primary"
           >
             <span>Book Now</span>
@@ -225,6 +225,127 @@ const LandingPage = () => {
               </motion.button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Restaurant Section */}
+      <section className="section restaurant-highlight-section">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="section-title">
+              Culinary Excellence
+            </h2>
+            <p className="section-subtitle">
+              Experience a gastronomic journey with our multi-cuisine restaurant featuring expert chefs and exceptional ambiance.
+            </p>
+          </motion.div>
+
+          <div className="restaurant-highlight-grid">
+            {/* Main Feature Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="restaurant-main-card"
+              onClick={() => navigate('/restaurant')}
+            >
+              <div className="restaurant-main-image">
+                <img 
+                  src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" 
+                  alt="Restaurant Dining" 
+                />
+                <div className="restaurant-overlay"></div>
+                <div className="restaurant-main-content">
+                  <h3>Komal Garden Restaurant</h3>
+                  <p>Authentic flavors from around the world</p>
+                  <button className="btn-primary-small">
+                    Explore Menu <ChevronRight size={18} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Feature Cards */}
+            <div className="restaurant-features-column">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="restaurant-feature-card"
+              >
+                <div className="restaurant-feature-icon">
+                  <Utensils size={32} />
+                </div>
+                <h4>Multi-Cuisine</h4>
+                <p>Indian, Chinese, Continental & more</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="restaurant-feature-card"
+              >
+                <div className="restaurant-feature-icon">
+                  <ChefHat size={32} />
+                </div>
+                <h4>Expert Chefs</h4>
+                <p>Prepared by culinary masters</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="restaurant-feature-card"
+              >
+                <div className="restaurant-feature-icon">
+                  <Coffee size={32} />
+                </div>
+                <h4>All Day Dining</h4>
+                <p>Breakfast, Lunch & Dinner</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="restaurant-feature-card"
+              >
+                <div className="restaurant-feature-icon">
+                  <Award size={32} />
+                </div>
+                <h4>Premium Quality</h4>
+                <p>Fresh ingredients, authentic taste</p>
+              </motion.div>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-center mt-12"
+          >
+            <button 
+              className="btn-secondary"
+              onClick={() => navigate('/restaurant')}
+            >
+              View Full Details <ChevronRight size={20} className="ml-2" />
+            </button>
+          </motion.div>
         </div>
       </section>
 
