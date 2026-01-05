@@ -90,19 +90,10 @@ const AdminDashboard = () => {
             </Col>
             
             <Col xs={6} md={8} className="d-flex align-items-center justify-content-end gap-2">
-              <Dropdown align="end">
-                <Dropdown.Toggle variant="outline-dark" size="sm">
-                  <FaUserCircle size={18} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item><FaUserCircle className="me-2" />Profile</Dropdown.Item>
-                  <Dropdown.Item><FaCog className="me-2" />Settings</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item className="text-danger" onClick={handleLogout}>
-                    <FaSignOutAlt className="me-2" />Logout
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <Button variant="outline-danger" size="sm" onClick={handleLogout}>
+                <FaSignOutAlt className="me-2" />
+                Logout
+              </Button>
             </Col>
           </Row>
         </Container>
@@ -1177,15 +1168,9 @@ const DashboardOverview = () => {
       }}>
         <Card.Body className="py-4">
           <Row className="align-items-center">
-            <Col md={8}>
+            <Col md={12}>
               <h2 className="text-white fw-bold mb-2">Welcome back, Admin! 👋</h2>
               <p className="text-white-50 mb-0">Here's what's happening with your hotel today.</p>
-            </Col>
-            <Col md={4} className="text-md-end">
-              <Button variant="light" className="me-2">
-                <FaDownload className="me-2" />
-                Export Report
-              </Button>
             </Col>
           </Row>
         </Card.Body>
