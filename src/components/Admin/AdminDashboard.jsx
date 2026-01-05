@@ -232,8 +232,8 @@ const GalleryManager = () => {
 
   const handleFile = (file) => {
     if (file) {
-      if (file.size > 20 * 1024 * 1024) {
-        alert('File size must be less than 20MB');
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10MB (Cloudinary free plan limit)');
         return;
       }
       setSelectedFile(file);
@@ -370,7 +370,7 @@ const GalleryManager = () => {
             />
             <FaCloudUploadAlt size={48} className={isDragging ? 'text-warning' : 'text-secondary'} />
             <h5 className="mt-3 mb-2">Drag and drop to upload</h5>
-            <p className="text-muted small mb-0">Supported formats: JPG, PNG, and GIF. Max size 20MB</p>
+            <p className="text-muted small mb-0">Supported formats: JPG, PNG, and GIF. Max size 10MB</p>
           </div>
 
           <Row className="g-3 mt-3">
