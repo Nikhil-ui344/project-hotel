@@ -16,9 +16,9 @@ const Footer = () => {
         <div>
           <h4 className="footer-heading">Contact</h4>
           <div className="footer-links">
-            <p className="footer-contact-item"><MapPin className="footer-icon" /> 123 Residency Road, Bangalore, India</p>
-            <p className="footer-contact-item"><Phone className="footer-icon" /> +91 80 1234 xxxx</p>
-            <p className="footer-contact-item"><Mail className="footer-icon" /> info@komalgarden.com</p>
+            <p className="footer-contact-item"><MapPin className="footer-icon" /> Chenduru (Thattihalli Cross), Bangalore Hyderabad Road, Near Bagepalli, Chikkaballapura (D)</p>
+            <p className="footer-contact-item"><Phone className="footer-icon" /> +91 97391 22444, +91 70191 99999</p>
+            <p className="footer-contact-item"><Mail className="footer-icon" /> reservations@grandluxe.com</p>
           </div>
         </div>
         <div>

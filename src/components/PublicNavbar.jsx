@@ -33,8 +33,8 @@ const PublicNavbar = () => {
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/restaurant" className="nav-link">Restaurant</Link>
           <Link to="/rooms" className="nav-link">Rooms</Link>
-          <Link to="/gallery" className="nav-link">Gallery</Link>
           <Link to="/party-hall" className="nav-link">Party Hall</Link>
+          <Link to="/gallery" className="nav-link">Gallery</Link>
           <Link to="/contact" className="nav-link">Contact</Link>
         </div>
 
@@ -52,8 +52,8 @@ const PublicNavbar = () => {
           <button className="mobile-nav-link" onClick={() => handleNavigation('/about')}>About</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/restaurant')}>Restaurant</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/rooms')}>Rooms</button>
-          <button className="mobile-nav-link" onClick={() => handleNavigation('/gallery')}>Gallery</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/party-hall')}>Party Hall</button>
+          <button className="mobile-nav-link" onClick={() => handleNavigation('/gallery')}>Gallery</button>
           <button className="mobile-nav-link" onClick={() => handleNavigation('/contact')}>Contact</button>
         </div>
       </div>
