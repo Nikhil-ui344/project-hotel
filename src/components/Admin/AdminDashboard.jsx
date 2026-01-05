@@ -459,7 +459,8 @@ const GalleryManager = () => {
                   <option>Bedrooms</option>
                   <option>Exterior</option>
                   <option>Restaurant</option>
-                  <option>Pool</option>
+                  <option>Parking</option>
+                  <option>Party Hall</option>
                   <option>Lobby</option>
                 </Form.Select>
               </Form.Group>
