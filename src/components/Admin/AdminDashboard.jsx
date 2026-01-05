@@ -311,18 +311,21 @@ const GalleryManager = () => {
 
   const handleFile = async (file) => {
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        alert('File size must be less than 10MB (Cloudinary free plan limit)');
-        return;
-      }
-      
       // Show compression message if file is large
       if (file.size > 9 * 1024 * 1024) {
         alert('Image is being compressed to optimize upload...');
       }
       
       try {
+        // Compress the image first
         const processedFile = await compressImage(file);
+        
+        // Check if compressed file is still too large
+        if (processedFile.size > 10 * 1024 * 1024) {
+          alert('Image is too large even after compression. Please use a smaller image or compress it manually.');
+          return;
+        }
+        
         setSelectedFile(processedFile);
         setPreviewUrl(URL.createObjectURL(processedFile));
         
@@ -331,6 +334,7 @@ const GalleryManager = () => {
           const originalSizeMB = (file.size / (1024 * 1024)).toFixed(2);
           const compressedSizeMB = (processedFile.size / (1024 * 1024)).toFixed(2);
           console.log(`Compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
+          alert(`Image compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
         }
       } catch (error) {
         console.error('Error compressing image:', error);
