@@ -32,12 +32,12 @@ const galleryStorage = new CloudinaryStorage({
 // Create multer upload instances
 const uploadRoom = multer({ 
   storage: roomStorage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
 const uploadGallery = multer({ 
   storage: galleryStorage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
 module.exports = {
