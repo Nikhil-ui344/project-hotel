@@ -383,7 +383,7 @@ const GalleryManager = () => {
                 >
                   <option>Bedrooms</option>
                   <option>Exterior</option>
-                  <option>Dining</option>
+                  <option>Restaurant</option>
                   <option>Pool</option>
                   <option>Lobby</option>
                 </Form.Select>
