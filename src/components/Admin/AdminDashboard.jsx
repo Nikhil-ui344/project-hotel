@@ -230,14 +230,112 @@ const GalleryManager = () => {
     }
   };
 
-  const handleFile = (file) => {
+  // Function to compress image if it's larger than 9MB
+  const compressImage = async (file) => {
+    const maxSize = 9 * 1024 * 1024; // 9MB
+    
+    // If file is already under 9MB, return it as is
+    if (file.size <= maxSize) {
+      return file;
+    }
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate compression quality based on file size
+          let quality = 0.9;
+          const sizeRatio = maxSize / file.size;
+          
+          if (sizeRatio < 0.5) {
+            quality = 0.7;
+          } else if (sizeRatio < 0.7) {
+            quality = 0.8;
+          }
+          
+          // Set canvas dimensions
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert canvas to blob with compression
+          canvas.toBlob(
+            (blob) => {
+              // If still too large, reduce dimensions
+              if (blob.size > maxSize) {
+                const scale = Math.sqrt(maxSize / blob.size);
+                width = Math.floor(width * scale);
+                height = Math.floor(height * scale);
+                
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                canvas.toBlob(
+                  (finalBlob) => {
+                    const compressedFile = new File([finalBlob], file.name, {
+                      type: 'image/jpeg',
+                      lastModified: Date.now(),
+                    });
+                    resolve(compressedFile);
+                  },
+                  'image/jpeg',
+                  quality
+                );
+              } else {
+                const compressedFile = new File([blob], file.name, {
+                  type: 'image/jpeg',
+                  lastModified: Date.now(),
+                });
+                resolve(compressedFile);
+              }
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+      };
+    });
+  };
+
+  const handleFile = async (file) => {
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
         alert('File size must be less than 10MB (Cloudinary free plan limit)');
         return;
       }
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      
+      // Show compression message if file is large
+      if (file.size > 9 * 1024 * 1024) {
+        alert('Image is being compressed to optimize upload...');
+      }
+      
+      try {
+        const processedFile = await compressImage(file);
+        setSelectedFile(processedFile);
+        setPreviewUrl(URL.createObjectURL(processedFile));
+        
+        // Show size reduction info
+        if (file.size > 9 * 1024 * 1024) {
+          const originalSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+          const compressedSizeMB = (processedFile.size / (1024 * 1024)).toFixed(2);
+          console.log(`Compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
+        }
+      } catch (error) {
+        console.error('Error compressing image:', error);
+        alert('Error processing image. Please try again.');
+      }
     }
   };
 
