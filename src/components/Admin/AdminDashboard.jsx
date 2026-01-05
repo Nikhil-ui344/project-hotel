@@ -252,14 +252,16 @@ const GalleryManager = () => {
           let width = img.width;
           let height = img.height;
           
-          // Calculate compression quality based on file size
-          let quality = 0.9;
+          // Calculate target quality to stay close to 9MB
+          // More conservative approach - higher quality to preserve image
           const sizeRatio = maxSize / file.size;
+          let quality = Math.max(0.85, Math.min(0.95, sizeRatio * 1.1));
           
-          if (sizeRatio < 0.5) {
-            quality = 0.7;
-          } else if (sizeRatio < 0.7) {
-            quality = 0.8;
+          // Only resize if drastically over size (more than 50% over)
+          if (file.size > maxSize * 1.5) {
+            const scale = Math.sqrt(maxSize * 1.2 / file.size); // Target slightly above 9MB
+            width = Math.floor(width * scale);
+            height = Math.floor(height * scale);
           }
           
           // Set canvas dimensions
@@ -272,34 +274,11 @@ const GalleryManager = () => {
           // Convert canvas to blob with compression
           canvas.toBlob(
             (blob) => {
-              // If still too large, reduce dimensions
-              if (blob.size > maxSize) {
-                const scale = Math.sqrt(maxSize / blob.size);
-                width = Math.floor(width * scale);
-                height = Math.floor(height * scale);
-                
-                canvas.width = width;
-                canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
-                
-                canvas.toBlob(
-                  (finalBlob) => {
-                    const compressedFile = new File([finalBlob], file.name, {
-                      type: 'image/jpeg',
-                      lastModified: Date.now(),
-                    });
-                    resolve(compressedFile);
-                  },
-                  'image/jpeg',
-                  quality
-                );
-              } else {
-                const compressedFile = new File([blob], file.name, {
-                  type: 'image/jpeg',
-                  lastModified: Date.now(),
-                });
-                resolve(compressedFile);
-              }
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
             },
             'image/jpeg',
             quality
@@ -311,11 +290,6 @@ const GalleryManager = () => {
 
   const handleFile = async (file) => {
     if (file) {
-      // Show compression message if file is large
-      if (file.size > 9 * 1024 * 1024) {
-        alert('Image is being compressed to optimize upload...');
-      }
-      
       try {
         // Compress the image first
         const processedFile = await compressImage(file);
@@ -329,12 +303,11 @@ const GalleryManager = () => {
         setSelectedFile(processedFile);
         setPreviewUrl(URL.createObjectURL(processedFile));
         
-        // Show size reduction info
+        // Log size reduction info for debugging
         if (file.size > 9 * 1024 * 1024) {
           const originalSizeMB = (file.size / (1024 * 1024)).toFixed(2);
           const compressedSizeMB = (processedFile.size / (1024 * 1024)).toFixed(2);
           console.log(`Compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
-          alert(`Image compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
         }
       } catch (error) {
         console.error('Error compressing image:', error);
