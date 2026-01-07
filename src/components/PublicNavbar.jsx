@@ -23,8 +23,7 @@ const PublicNavbar = () => {
     >
       <div className="navbar-container">
         <Link to="/" className="logo">
-          <span className="logo-text">Komal Garden</span>
-          <span className="logo-tagline">Luxury Hotel</span>
+          <img src="/logo-main-2.jpg" alt="Komal Garden" className="logo-image" />
         </Link>
         
         {/* Desktop Menu */}

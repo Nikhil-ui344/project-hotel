@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Award, Users, History, Heart } from 'lucide-react'
+import { Award, Users, Heart, Utensils } from 'lucide-react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
 
@@ -10,15 +10,33 @@ const About = () => {
       
       {/* Header */}
       <div className="page-header">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: '1rem' }}
+        >
+          <img 
+            src="/logo-main-1.jpg" 
+            alt="Komal Garden" 
+            style={{ 
+              maxWidth: '150px', 
+              height: 'auto',
+              borderRadius: '10px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="page-title"
         >
           About Us
         </motion.h1>
         <p className="page-subtitle">
-          A legacy of luxury, hospitality, and timeless elegance.
+          Where authentic flavors meet warm hospitality in the heart of Karnataka.
         </p>
       </div>
 
@@ -43,13 +61,13 @@ const About = () => {
             className="about-content"
           >
             <h2 className="section-title" style={{ textAlign: 'left' }}>
-              Our Heritage
+              Welcome to Komal Garden
             </h2>
             <p className="about-text">
-              Founded in 1920, Grand Luxe has stood as a beacon of luxury and refinement for over a century. What began as a boutique establishment has grown into an icon of world-class hospitality, hosting dignitaries, celebrities, and discerning travelers from around the globe.
+              Nestled on the scenic Bangalore-Hyderabad Road near Bagepalli in Chikkaballapura District, Komal Garden stands as a premier destination for authentic dining experiences and comfortable accommodations. Located at Chenduru (Thattihalli Cross), we proudly serve guests seeking quality food, warm hospitality, and memorable celebrations.
             </p>
             <p className="about-text">
-              Our philosophy is simple: to provide an experience that transcends the ordinary. Every detail, from our handcrafted furniture to our personalized service, is curated to ensure your stay is nothing short of perfection.
+              Our establishment features a renowned multi-cuisine restaurant offering Indian, Chinese, Continental, and South Indian specialties, complemented by comfortable guest rooms and the elegant Samskruti Party Hall for your special occasions. Whether you're a traveler seeking respite, a food enthusiast exploring Karnataka's culinary landscape, or planning a celebration, Komal Garden provides the perfect setting.
             </p>
           </motion.div>
         </div>
@@ -72,10 +90,10 @@ const About = () => {
             }}
           >
             {[
-              { icon: History, title: 'Legacy', desc: 'Over 100 years of excellence in hospitality.' },
-              { icon: Heart, title: 'Passion', desc: 'Dedicated to creating unforgettable moments.' },
-              { icon: Award, title: 'Quality', desc: 'Uncompromising standards in every detail.' },
-              { icon: Users, title: 'Service', desc: 'Personalized care for every guest.' },
+              { icon: Utensils, title: 'Culinary Excellence', desc: 'Authentic multi-cuisine dining with fresh ingredients and expert chefs.' },
+              { icon: Heart, title: 'Warm Hospitality', desc: 'Creating memorable experiences for every guest with personalized care.' },
+              { icon: Award, title: 'Quality Service', desc: 'Commitment to excellence in food, accommodations, and events.' },
+              { icon: Users, title: 'Family Friendly', desc: 'A welcoming atmosphere perfect for families, travelers, and celebrations.' },
             ].map((item, index) => {
               const Icon = item.icon
               return (

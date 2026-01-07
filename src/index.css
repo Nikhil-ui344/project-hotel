@@ -134,6 +134,19 @@ ul {
   transform: translateY(-2px);
 }
 
+.logo-image {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.logo:hover .logo-image {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
 .logo-text {
   font-family: var(--font-serif);
   font-size: 1.75rem;
@@ -632,6 +645,23 @@ ul {
   grid-template-columns: 1fr;
   gap: 3rem;
   margin-bottom: 3rem;
+}
+
+.footer-logo {
+  margin-bottom: 1rem;
+}
+
+.footer-logo-image {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.footer-logo-image:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 @media (min-width: 768px) {
@@ -1388,10 +1418,21 @@ ul {
 }
 
 .splash-logo-wrapper {
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   margin-bottom: 2rem;
   color: var(--golden-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 15px;
+  filter: drop-shadow(0 0 20px rgba(212, 168, 70, 0.4));
 }
 
 .splash-logo-svg {

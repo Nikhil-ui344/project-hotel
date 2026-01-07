@@ -1,9 +1,29 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Calendar, Music, Utensils, Camera, CheckCircle, Heart, Briefcase, Cake, PartyPopper, Presentation, Sparkles, MessageCircle } from 'lucide-react';
 import PublicNavbar from './PublicNavbar';
 import Footer from './Footer';
+import API_URL from '../config/api';
 
 const PartyHall = () => {
+  const [partyHallImages, setPartyHallImages] = useState([]);
+  const [imagesLoading, setImagesLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch party hall images from gallery
+    fetch(`${API_URL}/api/gallery`)
+      .then(res => res.json())
+      .then(data => {
+        const hallPhotos = data.filter(img => img.category === 'Party Hall');
+        setPartyHallImages(hallPhotos);
+        setImagesLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch party hall images', err);
+        setImagesLoading(false);
+      });
+  }, []);
+
   const features = [
     { icon: Users, title: 'Custom Event Setup', description: 'Flexible venue configuration' },
     { icon: Music, title: 'Audio-Visual Equipment', description: 'Professional sound & visual systems' },
@@ -65,13 +85,30 @@ const PartyHall = () => {
       
       {/* Header */}
       <div className="page-header">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: '1rem' }}
+        >
+          <img 
+            src="/logo-main-1.jpg" 
+            alt="Komal Garden" 
+            style={{ 
+              maxWidth: '150px', 
+              height: 'auto',
+              borderRadius: '10px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           className="page-title"
         >
-          Elegant Party Hall
+          Samskruti Party Hall
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -82,6 +119,54 @@ const PartyHall = () => {
           Host unforgettable events in our stylish, flexible venue—perfect for weddings, parties, and meetings
         </motion.p>
       </div>
+
+      {/* Party Hall Photo Gallery */}
+      {partyHallImages.length > 0 && (
+        <div className="section">
+          <div className="container">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="section-heading"
+            >
+              Samskruti Party Hall
+            </motion.h2>
+            <motion.div 
+              className="rooms-grid"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ staggerChildren: 0.15 }}
+            >
+              {partyHallImages.map((image, index) => (
+                <motion.div
+                  key={image._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="room-card"
+                >
+                  <div className="room-image-container">
+                    <img 
+                      src={image.imageUrl} 
+                      alt={image.description || 'Party Hall'} 
+                      className="room-image"
+                      style={{ height: '250px', objectFit: 'cover' }}
+                    />
+                  </div>
+                  {image.description && (
+                    <div className="room-content" style={{ padding: '1rem' }}>
+                      <p style={{ margin: 0, color: '#666', fontSize: '0.95rem' }}>{image.description}</p>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      )}
 
       {/* Features Section */}
       <div className="section">

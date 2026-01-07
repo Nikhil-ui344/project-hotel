@@ -43,9 +43,27 @@ const Gallery = () => {
       
       {/* Header */}
       <div className="page-header">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center', marginBottom: '1rem' }}
+        >
+          <img 
+            src="/logo-main-1.jpg" 
+            alt="Komal Garden" 
+            style={{ 
+              maxWidth: '150px', 
+              height: 'auto',
+              borderRadius: '10px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="page-title"
         >
           Gallery

@@ -5,12 +5,11 @@ const Footer = () => {
     <footer className="footer">
       <div className="container footer-grid">
         <div className="footer-brand">
-          <div className="logo">
-            <Hotel className="logo-icon" />
-            <span>Komal Garden</span>
+          <div className="footer-logo">
+            <img src="/logo-main-2.jpg" alt="Komal Garden" className="footer-logo-image" />
           </div>
           <p>
-            Experience the height of luxury in the heart of the city. Where every detail is crafted for your comfort.
+            Experience authentic multi-cuisine dining and comfortable accommodations. Where culinary excellence meets hospitality, creating unforgettable memories.
           </p>
         </div>
         <div>

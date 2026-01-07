@@ -1,9 +1,29 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Utensils, Coffee, Wine, ChefHat, Clock, Star, MessageCircle } from 'lucide-react';
 import PublicNavbar from './PublicNavbar';
 import Footer from './Footer';
+import API_URL from '../config/api';
 
 const Restaurant = () => {
+  const [restaurantImages, setRestaurantImages] = useState([]);
+  const [imagesLoading, setImagesLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch restaurant images from gallery
+    fetch(`${API_URL}/api/gallery`)
+      .then(res => res.json())
+      .then(data => {
+        const restaurantPhotos = data.filter(img => img.category === 'Restaurant');
+        setRestaurantImages(restaurantPhotos);
+        setImagesLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to fetch restaurant images', err);
+        setImagesLoading(false);
+      });
+  }, []);
+
   const features = [
     { icon: Utensils, title: 'Multi-Cuisine', description: 'Indian, Chinese, Continental & More' },
     { icon: ChefHat, title: 'Expert Chefs', description: 'Experienced culinary professionals' },
@@ -119,10 +139,28 @@ const Restaurant = () => {
       
       {/* Header */}
       <div className="page-header">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="restaurant-logo-container"
+          style={{ textAlign: 'center', marginBottom: '1rem' }}
+        >
+          <img 
+            src="/logo-restaurant.jpg" 
+            alt="Komal Garden Restaurant" 
+            style={{ 
+              maxWidth: '200px', 
+              height: 'auto',
+              borderRadius: '10px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }} 
+          />
+        </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
           className="page-title"
         >
           Restaurant
@@ -136,6 +174,54 @@ const Restaurant = () => {
           Experience culinary excellence with a diverse menu crafted by expert chefs
         </motion.p>
       </div>
+
+      {/* Restaurant Photo Gallery */}
+      {restaurantImages.length > 0 && (
+        <div className="section">
+          <div className="container">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="section-heading"
+            >
+              Our Restaurant
+            </motion.h2>
+            <motion.div 
+              className="rooms-grid"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ staggerChildren: 0.15 }}
+            >
+              {restaurantImages.map((image, index) => (
+                <motion.div
+                  key={image._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="room-card"
+                >
+                  <div className="room-image-container">
+                    <img 
+                      src={image.imageUrl} 
+                      alt={image.description || 'Restaurant'} 
+                      className="room-image"
+                      style={{ height: '250px', objectFit: 'cover' }}
+                    />
+                  </div>
+                  {image.description && (
+                    <div className="room-content" style={{ padding: '1rem' }}>
+                      <p style={{ margin: 0, color: '#666', fontSize: '0.95rem' }}>{image.description}</p>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      )}
 
       {/* Features Section */}
       <div className="section">

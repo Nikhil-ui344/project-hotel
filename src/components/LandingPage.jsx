@@ -114,10 +114,10 @@ const LandingPage = () => {
             transition={{ duration: 1, ease: "easeOut" }}
           >
             <h1 className="hero-title">
-              Experience Timeless Luxury
+              Experience Fine Dining & Hospitality
             </h1>
             <p className="hero-subtitle">
-              Where elegance meets exceptional hospitality
+              Where culinary excellence meets comfortable stays
             </p>
           </motion.div>
 
@@ -437,40 +437,6 @@ const LandingPage = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* About Us */}
-      <section id="about" className="section section-white">
-        <div className="container about-container">
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="about-image-wrapper"
-          >
-            <div className="about-frame"></div>
-            <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80" alt="About Us" className="about-img" />
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="about-content"
-          >
-            <h2 className="section-title" style={{ textAlign: 'left' }}>
-              Our Story
-            </h2>
-            <p className="about-text">
-              Founded in 1920, Grand Luxe has been the epitome of elegance and hospitality for over a century. Nestled in the heart of the city, we offer an escape into a world of refined luxury and timeless charm. Our commitment to excellence ensures that every guest experiences the royal treatment they deserve.
-            </p>
-            <button className="btn-text" onClick={() => navigate('/about')}>
-              Read More <ChevronRight size={16} className="ml-1" />
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Testimonials */}
       <section className="testimonials-section">
         <div className="testimonials-bg">
