@@ -96,7 +96,7 @@ const LandingPage = () => {
         <motion.div 
           className="hero-bg"
           style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80")',
+            backgroundImage: 'url("/DSC_3307.JPG")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             y,
