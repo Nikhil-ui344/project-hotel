@@ -1,4 +1,4 @@
-import { Hotel, MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
+import { Hotel, MapPin, Phone, Mail, Instagram, Facebook, Clock } from 'lucide-react'
 
 const Footer = () => {
   return (
@@ -21,20 +21,20 @@ const Footer = () => {
           </div>
         </div>
         <div>
+          <h4 className="footer-heading">Business Hours</h4>
+          <div className="footer-links">
+            <p className="footer-contact-item"><Clock className="footer-icon" /> Restaurant: 7:30 AM - 10:30 PM</p>
+            <p className="footer-contact-item"><Clock className="footer-icon" /> Front Desk: 24/7</p>
+            <p className="footer-contact-item"><Clock className="footer-icon" /> Room Service: Available Anytime</p>
+          </div>
+        </div>
+        <div>
           <h4 className="footer-heading">Follow Us</h4>
           <div className="social-links">
             <a href="https://www.instagram.com/komal._.garden?igsh=MWpmZ2J5N3o4aHM5Yg==" target="_blank" rel="noopener noreferrer" className="social-link">
               <Instagram size={20} />
             </a>
             <a href="#" className="social-link"><Facebook size={20} /></a>
-          </div>
-        </div>
-        <div>
-          <h4 className="footer-heading">Newsletter</h4>
-          <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '1rem' }}>Subscribe to receive exclusive offers and updates.</p>
-          <div className="newsletter-form">
-            <input type="email" placeholder="Your email address" className="newsletter-input" />
-            <button className="newsletter-btn">Subscribe</button>
           </div>
         </div>
       </div>

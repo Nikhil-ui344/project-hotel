@@ -258,8 +258,8 @@ const LandingPage = () => {
             >
               <div className="restaurant-main-image">
                 <img 
-                  src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" 
-                  alt="Restaurant Dining" 
+                  src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=800&q=80" 
+                  alt="Komal Garden Restaurant - South Indian Vegetarian Meals" 
                 />
                 <div className="restaurant-overlay"></div>
                 <div className="restaurant-main-content">

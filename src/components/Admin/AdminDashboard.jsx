@@ -76,12 +76,17 @@ const AdminDashboard = () => {
                 <FaBars />
               </Button>
               <div className="d-flex align-items-center gap-3">
-                <div className="rounded-3 p-2" style={{ 
-                  background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
-                  boxShadow: '0 4px 15px rgba(139, 111, 71, 0.4)'
-                }}>
-                  <FaShieldAlt size={28} className="text-white" />
-                </div>
+                <img 
+                  src="/logo-main-2.jpg" 
+                  alt="Komal Garden" 
+                  style={{ 
+                    height: '50px', 
+                    width: 'auto',
+                    borderRadius: '8px',
+                    objectFit: 'contain',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  }} 
+                />
                 <div className="d-none d-md-block">
                   <h5 className="mb-0 fw-bold" style={{ color: '#2a1a12' }}>Komal Garden</h5>
                   <small className="text-muted">Admin Dashboard</small>

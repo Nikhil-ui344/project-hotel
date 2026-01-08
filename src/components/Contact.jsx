@@ -34,102 +34,196 @@ const Contact = () => {
         >
           Contact Us
         </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="page-subtitle"
+        >
+          We're here to help with reservations, inquiries, and special requests
+        </motion.p>
       </div>
 
-      <div className="contact-container">
-        <div className="contact-grid">
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="contact-info"
+      {/* Contact Cards Grid */}
+      <div className="section">
+        <div className="container">
+          <motion.div 
+            className="rooms-grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ staggerChildren: 0.15 }}
           >
-            <h2>
-              Get in Touch
-            </h2>
-            <div className="contact-items">
-              <div className="contact-item">
-                <div className="contact-icon-box">
-                  <MapPin size={24} />
+            {/* Address Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="room-card"
+              style={{ height: 'auto' }}
+            >
+              <div className="room-content" style={{ padding: '2.5rem', textAlign: 'center' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  boxShadow: '0 8px 20px rgba(139, 111, 71, 0.3)'
+                }}>
+                  <MapPin size={40} color="white" />
                 </div>
-                <div className="contact-details">
-                  <h3>Address</h3>
-                  <p>Chenduru (Thattihalli Cross)<br />Bangalore Hyderabad Road<br />Near Bagepalli, Chikkaballapura (D)</p>
-                </div>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#2a1a12' }}>Our Location</h3>
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
+                  Chenduru (Thattihalli Cross)<br />
+                  Bangalore Hyderabad Road<br />
+                  Near Bagepalli<br />
+                  Chikkaballapura District<br />
+                  Karnataka, India
+                </p>
               </div>
-              <div className="contact-item">
-                <div className="contact-icon-box">
-                  <Phone size={24} />
-                </div>
-                <div className="contact-details">
-                  <h3>Phone</h3>
-                  <p>+91 97391 22444<br />+91 70191 99999</p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon-box">
-                  <Mail size={24} />
-                </div>
-                <div className="contact-details">
-                  <h3>Email</h3>
-                  <p>reservations@grandluxe.com<br />info@grandluxe.com</p>
-                </div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon-box">
-                  <Clock size={24} />
-                </div>
-                <div className="contact-details">
-                  <h3>Hours</h3>
-                  <p>Front Desk: 24/7<br />Concierge: 8:00 AM - 10:00 PM</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="contact-form-container"
+            {/* Phone Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="room-card"
+              style={{ height: 'auto' }}
+            >
+              <div className="room-content" style={{ padding: '2.5rem', textAlign: 'center' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  boxShadow: '0 8px 20px rgba(139, 111, 71, 0.3)'
+                }}>
+                  <Phone size={40} color="white" />
+                </div>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#2a1a12' }}>Call Us</h3>
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
+                  <a href="tel:+919739122444" style={{ color: '#8B6F47', textDecoration: 'none', fontWeight: '500' }}>
+                    +91 97391 22444
+                  </a><br />
+                  <a href="tel:+917019199999" style={{ color: '#8B6F47', textDecoration: 'none', fontWeight: '500' }}>
+                    +91 70191 99999
+                  </a>
+                </p>
+                <p style={{ fontSize: '0.95rem', color: '#777', marginTop: '1rem' }}>Available 24/7 for assistance</p>
+              </div>
+            </motion.div>
+
+            {/* Email Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="room-card"
+              style={{ height: 'auto' }}
+            >
+              <div className="room-content" style={{ padding: '2.5rem', textAlign: 'center' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  boxShadow: '0 8px 20px rgba(139, 111, 71, 0.3)'
+                }}>
+                  <Mail size={40} color="white" />
+                </div>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#2a1a12' }}>Email Us</h3>
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
+                  <a href="mailto:reservations@komalgarden.com" style={{ color: '#8B6F47', textDecoration: 'none', fontWeight: '500' }}>
+                    reservations@komalgarden.com
+                  </a>
+                </p>
+                <p style={{ fontSize: '0.95rem', color: '#777', marginTop: '1rem' }}>We'll respond within 24 hours</p>
+              </div>
+            </motion.div>
+
+            {/* Hours Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="room-card"
+              style={{ height: 'auto' }}
+            >
+              <div className="room-content" style={{ padding: '2.5rem', textAlign: 'center' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #8B6F47 0%, #D4A574 100%)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  boxShadow: '0 8px 20px rgba(139, 111, 71, 0.3)'
+                }}>
+                  <Clock size={40} color="white" />
+                </div>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#2a1a12' }}>Business Hours</h3>
+                <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
+                  <strong>Restaurant:</strong><br />
+                  7:30 AM - 10:30 PM<br /><br />
+                  <strong>Front Desk:</strong><br />
+                  24/7 Service
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Map Section */}
+      <div className="section" style={{ paddingTop: '2rem', paddingBottom: '4rem', background: '#f8f8f8' }}>
+        <div className="container">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-heading"
+            style={{ marginBottom: '2rem' }}
           >
-            <h2>
-              Send a Message
-            </h2>
-            <form className="contact-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>First Name</label>
-                  <input type="text" className="form-input" placeholder="John" />
-                </div>
-                <div className="form-group">
-                  <label>Last Name</label>
-                  <input type="text" className="form-input" placeholder="Doe" />
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Email Address</label>
-                <input type="email" className="form-input" placeholder="john@example.com" />
-              </div>
-              <div className="form-group">
-                <label>Subject</label>
-                <select className="form-select">
-                  <option>General Inquiry</option>
-                  <option>Reservation</option>
-                  <option>Event Hosting</option>
-                  <option>Feedback</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Message</label>
-                <textarea rows="4" className="form-textarea" placeholder="How can we help you?"></textarea>
-              </div>
-              <button type="button" className="submit-btn">
-                Send Message
-              </button>
-            </form>
+            Find Us on Map
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{
+              borderRadius: '15px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+              height: '400px',
+              maxWidth: '900px',
+              margin: '0 auto'
+            }}
+          >
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3880.5!2d77.8!3d13.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQyJzAwLjAiTiA3N8KwNDgnMDAuMCJF!5e0!3m2!1sen!2sin!4v1" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Komal Garden Location - Chenduru, Bangalore Hyderabad Road"
+            ></iframe>
           </motion.div>
         </div>
       </div>
