@@ -154,80 +154,6 @@ const LandingPage = () => {
         </motion.div>
       </div>
 
-      {/* Rooms Section */}
-      <section id="rooms" className="section section-white">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="section-title">
-              Exquisite Accommodations
-            </h2>
-            <p className="section-subtitle">
-              Discover our collection of meticulously designed rooms and suites, offering the perfect blend of comfort and sophistication.
-            </p>
-          </motion.div>
-          
-          {roomsLoading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-brown"></div>
-            </div>
-          ) : (
-            <div className="rooms-grid">
-              {rooms.slice(0, 3).map((room, index) => (
-                <motion.div
-                  key={room.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  whileHover={{ y: -10 }}
-                  onClick={() => navigate('/rooms')}
-                  className="room-card"
-                >
-                  <div className="room-image-container">
-                    <img 
-                      src={room.img.startsWith('http') ? room.img : `${window.location.origin}${room.img}`} 
-                      alt={room.title} 
-                      className="room-image" 
-                    />
-                    {!room.isAvailable && (
-                      <div className="room-badge-unavailable">Booked</div>
-                    )}
-                  </div>
-                  <div className="room-content">
-                    <h3 className="room-title">{room.title}</h3>
-                    <p className="room-description">{room.desc?.substring(0, 80)}...</p>
-                    <div className="room-footer">
-                      <p className="room-price">{room.price}</p>
-                      <button className="btn-text">
-                        View Details <ChevronRight size={16} className="ml-1" />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-          
-          {!roomsLoading && rooms.length > 3 && (
-            <div className="text-center mt-8">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/rooms')}
-                className="btn-secondary"
-              >
-                View All Rooms <ChevronRight size={20} className="ml-2" />
-              </motion.button>
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* Restaurant Section */}
       <section className="section restaurant-highlight-section">
         <div className="container">
@@ -437,6 +363,81 @@ const LandingPage = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Rooms Section */}
+      <section id="rooms" className="section section-white">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="section-title">
+              Exquisite Accommodations
+            </h2>
+            <p className="section-subtitle">
+              Discover our collection of meticulously designed rooms and suites, offering the perfect blend of comfort and sophistication.
+            </p>
+          </motion.div>
+          
+          {roomsLoading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-brown"></div>
+            </div>
+          ) : (
+            <div className="rooms-grid">
+              {rooms.slice(0, 3).map((room, index) => (
+                <motion.div
+                  key={room.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  whileHover={{ y: -10 }}
+                  onClick={() => navigate('/rooms')}
+                  className="room-card"
+                >
+                  <div className="room-image-container">
+                    <img 
+                      src={room.img.startsWith('http') ? room.img : `${window.location.origin}${room.img}`} 
+                      alt={room.title} 
+                      className="room-image" 
+                    />
+                    {!room.isAvailable && (
+                      <div className="room-badge-unavailable">Booked</div>
+                    )}
+                  </div>
+                  <div className="room-content">
+                    <h3 className="room-title">{room.title}</h3>
+                    <p className="room-description">{room.desc?.substring(0, 80)}...</p>
+                    <div className="room-footer">
+                      <p className="room-price">{room.price}</p>
+                      <button className="btn-text">
+                        View Details <ChevronRight size={16} className="ml-1" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+          
+          {!roomsLoading && rooms.length > 3 && (
+            <div className="text-center mt-8">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/rooms')}
+                className="btn-secondary"
+              >
+                View All Rooms <ChevronRight size={20} className="ml-2" />
+              </motion.button>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="testimonials-section">
         <div className="testimonials-bg">
