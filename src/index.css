@@ -2697,6 +2697,19 @@ ul {
 }
 
 @media (max-width: 767px) {
+  .navbar-container {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .logo {
+    margin-right: auto;
+  }
+
+  .mobile-menu-btn {
+    margin-left: auto;
+  }
+
   .navbar-links {
     display: none;
   }
