@@ -46,55 +46,55 @@ const Restaurant = () => {
     {
       category: 'Starters & Appetizers',
       items: [
-        { name: 'Paneer Tikka', description: 'Marinated cottage cheese grilled to perfection', price: '₹240' },
-        { name: 'Veg Manchurian', description: 'Crispy vegetable balls in tangy sauce', price: '₹220' },
-        { name: 'Spring Rolls', description: 'Crispy rolls with fresh vegetables', price: '₹180' },
-        { name: 'Corn Cheese Balls', description: 'Golden fried corn and cheese delights', price: '₹200' }
+        { name: 'Paneer Tikka', description: 'Marinated cottage cheese grilled to perfection' },
+        { name: 'Veg Manchurian', description: 'Crispy vegetable balls in tangy sauce' },
+        { name: 'Spring Rolls', description: 'Crispy rolls with fresh vegetables' },
+        { name: 'Corn Cheese Balls', description: 'Golden fried corn and cheese delights' }
       ]
     },
     {
       category: 'Main Course',
       items: [
-        { name: 'Butter Paneer Masala', description: 'Creamy tomato gravy with soft paneer', price: '₹280' },
-        { name: 'Dal Tadka', description: 'Yellow lentils tempered with aromatic spices', price: '₹180' },
-        { name: 'Veg Biryani', description: 'Fragrant basmati rice with mixed vegetables', price: '₹260' },
-        { name: 'Hakka Noodles', description: 'Stir-fried noodles with vegetables', price: '₹220' }
+        { name: 'Butter Paneer Masala', description: 'Creamy tomato gravy with soft paneer' },
+        { name: 'Dal Tadka', description: 'Yellow lentils tempered with aromatic spices' },
+        { name: 'Veg Biryani', description: 'Fragrant basmati rice with mixed vegetables' },
+        { name: 'Hakka Noodles', description: 'Stir-fried noodles with vegetables' }
       ]
     },
     {
       category: 'Tandoori Specials',
       items: [
-        { name: 'Tandoori Roti', description: 'Traditional clay oven bread', price: '₹40' },
-        { name: 'Butter Naan', description: 'Soft leavened bread with butter', price: '₹50' },
-        { name: 'Stuffed Kulcha', description: 'Bread stuffed with your choice of filling', price: '₹80' },
-        { name: 'Tandoori Veg Platter', description: 'Assorted grilled vegetables', price: '₹320' }
+        { name: 'Tandoori Roti', description: 'Traditional clay oven bread' },
+        { name: 'Butter Naan', description: 'Soft leavened bread with butter' },
+        { name: 'Stuffed Kulcha', description: 'Bread stuffed with your choice of filling' },
+        { name: 'Tandoori Veg Platter', description: 'Assorted grilled vegetables' }
       ]
     },
     {
       category: 'South Indian',
       items: [
-        { name: 'Masala Dosa', description: 'Crispy crepe with spiced potato filling', price: '₹120' },
-        { name: 'Idli Sambar', description: 'Steamed rice cakes with lentil soup', price: '₹80' },
-        { name: 'Vada Sambar', description: 'Crispy lentil donuts with sambar', price: '₹90' },
-        { name: 'Uttapam', description: 'Thick pancake with vegetable toppings', price: '₹130' }
+        { name: 'Masala Dosa', description: 'Crispy crepe with spiced potato filling' },
+        { name: 'Idli Sambar', description: 'Steamed rice cakes with lentil soup' },
+        { name: 'Vada Sambar', description: 'Crispy lentil donuts with sambar' },
+        { name: 'Uttapam', description: 'Thick pancake with vegetable toppings' }
       ]
     },
     {
       category: 'Beverages',
       items: [
-        { name: 'Fresh Lime Soda', description: 'Refreshing citrus drink', price: '₹80' },
-        { name: 'Mango Lassi', description: 'Sweet yogurt drink with mango', price: '₹120' },
-        { name: 'Masala Chai', description: 'Traditional spiced tea', price: '₹50' },
-        { name: 'Cold Coffee', description: 'Chilled coffee with ice cream', price: '₹140' }
+        { name: 'Fresh Lime Soda', description: 'Refreshing citrus drink' },
+        { name: 'Mango Lassi', description: 'Sweet yogurt drink with mango' },
+        { name: 'Masala Chai', description: 'Traditional spiced tea' },
+        { name: 'Cold Coffee', description: 'Chilled coffee with ice cream' }
       ]
     },
     {
       category: 'Desserts',
       items: [
-        { name: 'Gulab Jamun', description: 'Sweet milk dumplings in syrup', price: '₹100' },
-        { name: 'Kulfi', description: 'Traditional Indian ice cream', price: '₹120' },
-        { name: 'Brownie with Ice Cream', description: 'Warm chocolate brownie with vanilla ice cream', price: '₹180' },
-        { name: 'Fruit Salad', description: 'Fresh seasonal fruits', price: '₹140' }
+        { name: 'Gulab Jamun', description: 'Sweet milk dumplings in syrup' },
+        { name: 'Kulfi', description: 'Traditional Indian ice cream' },
+        { name: 'Brownie with Ice Cream', description: 'Warm chocolate brownie with vanilla ice cream' },
+        { name: 'Fruit Salad', description: 'Fresh seasonal fruits' }
       ]
     }
   ];
@@ -370,7 +370,6 @@ const Restaurant = () => {
                         <h4 className="menu-item-name">{item.name}</h4>
                         <p className="menu-item-description">{item.description}</p>
                       </div>
-                      <div className="menu-item-price">{item.price}</div>
                     </motion.div>
                   ))}
                 </div>
@@ -385,7 +384,7 @@ const Restaurant = () => {
             transition={{ delay: 0.4 }}
             className="menu-note"
           >
-            <p>* Prices are subject to change. Please contact us for the latest menu and pricing.</p>
+            <p>* Please contact us for menu pricing and availability.</p>
           </motion.div>
         </div>
       </div>
