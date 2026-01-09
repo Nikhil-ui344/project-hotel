@@ -100,7 +100,8 @@ const LandingPage = () => {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             y,
-            opacity
+            opacity,
+            willChange: 'transform, opacity'
           }}
         >
           <div className="hero-overlay"></div>
