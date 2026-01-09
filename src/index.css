@@ -2700,6 +2700,7 @@ ul {
   .navbar-container {
     justify-content: space-between;
     width: 100%;
+    padding: 0 1rem;
   }
 
   .logo {
