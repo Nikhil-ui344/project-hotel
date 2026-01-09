@@ -215,7 +215,7 @@ const Contact = () => {
             }}
           >
             <iframe 
-              src="https://www.google.com/maps?q=13.71595475286034,77.78516818196616&output=embed" 
+              src="https://www.google.com/maps?q=13.715938403260028,77.78512209905139&output=embed" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
