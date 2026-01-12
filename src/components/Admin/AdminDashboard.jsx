@@ -867,7 +867,6 @@ const RoomManager = () => {
                       type="text"
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      required
                     />
                   </Form.Group>
                 </Col>
@@ -879,7 +878,6 @@ const RoomManager = () => {
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       placeholder="$350/night"
-                      required
                     />
                   </Form.Group>
                 </Col>
@@ -913,7 +911,6 @@ const RoomManager = () => {
                       rows={4}
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      required
                     />
                   </Form.Group>
                 </Col>
