@@ -712,12 +712,6 @@ const RoomManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // For new rooms, require an image
-    if (!editingRoom && !selectedFile && !formData.imageUrl) {
-      alert('Please select an image');
-      return;
-    }
 
     try {
       setUploading(true);
@@ -1026,7 +1020,7 @@ const RoomManager = () => {
                   {uploading ? (
                     <>
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      <span>Saving...</span>
+                      <span>{editingRoom ? 'Updating...' : 'Uploading image to cloud... Please wait'}</span>
                     </>
                   ) : (
                     <>
