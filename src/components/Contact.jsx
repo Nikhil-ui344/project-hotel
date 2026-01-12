@@ -1,9 +1,30 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import PublicNavbar from './PublicNavbar'
 import Footer from './Footer'
+import API_URL from '../config/api'
 
 const Contact = () => {
+  const [contactEmail, setContactEmail] = useState('admin@komalgarden.com');
+
+  useEffect(() => {
+    fetchContactEmail();
+  }, []);
+
+  const fetchContactEmail = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/settings/contactEmail`);
+      if (response.ok) {
+        const data = await response.json();
+        setContactEmail(data.value);
+      }
+    } catch (error) {
+      console.error('Failed to fetch contact email:', error);
+      // Keep default email if fetch fails
+    }
+  };
+
   return (
     <div className="contact-page">
       <PublicNavbar />
@@ -145,8 +166,8 @@ const Contact = () => {
                 </div>
                 <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#2a1a12' }}>Email Us</h3>
                 <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#555' }}>
-                  <a href="mailto:reservations@komalgarden.com" style={{ color: '#8B6F47', textDecoration: 'none', fontWeight: '500' }}>
-                    reservations@komalgarden.com
+                  <a href={`mailto:${contactEmail}`} style={{ color: '#8B6F47', textDecoration: 'none', fontWeight: '500' }}>
+                    {contactEmail}
                   </a>
                 </p>
                 <p style={{ fontSize: '0.95rem', color: '#777', marginTop: '1rem' }}>We'll respond within 24 hours</p>

@@ -33,7 +33,8 @@ import {
   Wind,
   DollarSign,
   Users,
-  Calendar
+  Calendar,
+  Mail
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -1687,7 +1688,32 @@ const ReviewsManager = () => {
     const [newEmail, setNewEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emailSuccess, setEmailSuccess] = useState('');
-    const [emailLoading, setEmailLoading] = useState(false);  const handleChangePassword = async (e) => {
+    const [emailLoading, setEmailLoading] = useState(false);
+
+    // Contact email change states
+    const [contactEmail, setContactEmail] = useState('');
+    const [contactEmailError, setContactEmailError] = useState('');
+    const [contactEmailSuccess, setContactEmailSuccess] = useState('');
+    const [contactEmailLoading, setContactEmailLoading] = useState(false);
+    const [currentContactEmail, setCurrentContactEmail] = useState('');
+
+    // Load current contact email on component mount
+    useEffect(() => {
+      fetchCurrentContactEmail();
+    }, []);
+
+    const fetchCurrentContactEmail = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/settings/contactEmail`);
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentContactEmail(data.value);
+          setContactEmail(data.value);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact email:', error);
+      }
+    };  const handleChangePassword = async (e) => {
     e.preventDefault();
     setPasswordError('');
     setPasswordSuccess('');
@@ -1813,6 +1839,69 @@ const ReviewsManager = () => {
       setEmailError('Failed to change email. Please try again.');
     } finally {
       setEmailLoading(false);
+    }
+  };
+
+  const handleChangeContactEmail = async (e) => {
+    e.preventDefault();
+    setContactEmailError('');
+    setContactEmailSuccess('');
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactEmail)) {
+      setContactEmailError('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setContactEmailLoading(true);
+
+      console.log('Updating contact email to:', contactEmail);
+      console.log('API URL:', `${API_URL}/api/settings/contactEmail`);
+      console.log('Token exists:', !!localStorage.getItem('adminToken'));
+      
+      const response = await authFetch(`${API_URL}/api/settings/contactEmail`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          value: contactEmail,
+          description: 'Contact email displayed on website'
+        })
+      });
+
+      console.log('Response status:', response.status);
+      console.log('Response type:', response.headers.get('content-type'));
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Update successful:', data);
+        setContactEmailSuccess('Contact email updated successfully!');
+        setCurrentContactEmail(contactEmail);
+        setTimeout(() => {
+          setContactEmailSuccess('');
+        }, 3000);
+      } else {
+        // Check if response is JSON before parsing
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const error = await response.json();
+          console.error('Update failed:', error);
+          setContactEmailError(error.message || 'Failed to update contact email');
+        } else {
+          console.error('Non-JSON response:', response.status);
+          if (response.status === 401) {
+            setContactEmailError('Session expired. Please login again.');
+          } else {
+            setContactEmailError('Failed to update contact email. Please try again.');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error updating contact email:', error);
+      setContactEmailError(`Failed to update contact email: ${error.message || 'Please try again.'}`);
+    } finally {
+      setContactEmailLoading(false);
     }
   };
 
@@ -1984,6 +2073,87 @@ const ReviewsManager = () => {
                         </>
                       )}
                     </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* Contact Email Section */}
+          <Row className="g-4 mt-2">
+            <Col lg={12}>
+              <Card className="border h-100" style={{ borderRadius: '16px' }}>
+                <Card.Body className="p-4">
+                  <div className="d-flex align-items-center gap-3 mb-4">
+                    <div className="rounded-3 p-3" style={{ background: 'linear-gradient(135deg, #D4A846 0%, #F4C96B 100%)' }}>
+                      <Mail size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h5 className="fw-bold mb-1">Website Contact Email</h5>
+                      <small className="text-muted">Update the email address shown to customers on your website</small>
+                    </div>
+                  </div>
+
+                  {contactEmailError && (
+                    <Alert variant="danger" dismissible onClose={() => setContactEmailError('')}>
+                      {contactEmailError}
+                    </Alert>
+                  )}
+
+                  {contactEmailSuccess && (
+                    <Alert variant="success" dismissible onClose={() => setContactEmailSuccess('')}>
+                      {contactEmailSuccess}
+                    </Alert>
+                  )}
+
+                  {currentContactEmail && (
+                    <Alert variant="info" className="d-flex align-items-center gap-2">
+                      <Mail size={16} />
+                      <span>Current contact email: <strong>{currentContactEmail}</strong></span>
+                    </Alert>
+                  )}
+
+                  <Form onSubmit={handleChangeContactEmail}>
+                    <Row>
+                      <Col md={8}>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Contact Email Address</Form.Label>
+                          <Form.Control
+                            type="email"
+                            value={contactEmail}
+                            onChange={(e) => setContactEmail(e.target.value)}
+                            placeholder="e.g. reservations@komalgarden.com"
+                            required
+                          />
+                          <Form.Text className="text-muted">
+                            This email will be displayed on the Contact page and Footer
+                          </Form.Text>
+                        </Form.Group>
+                      </Col>
+                      <Col md={4} className="d-flex align-items-end">
+                        <Button 
+                          type="submit" 
+                          className="w-100 mb-3"
+                          disabled={contactEmailLoading || contactEmail === currentContactEmail}
+                          style={{
+                            background: (contactEmailLoading || contactEmail === currentContactEmail) ? undefined : 'linear-gradient(135deg, #D4A846 0%, #F4C96B 100%)',
+                            border: 'none'
+                          }}
+                        >
+                          {contactEmailLoading ? (
+                            <>
+                              <span className="spinner-border spinner-border-sm me-2" />
+                              Updating...
+                            </>
+                          ) : (
+                            <>
+                              <FaCheck className="me-2" />
+                              Update Email
+                            </>
+                          )}
+                        </Button>
+                      </Col>
+                    </Row>
                   </Form>
                 </Card.Body>
               </Card>

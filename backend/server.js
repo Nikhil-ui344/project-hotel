@@ -9,6 +9,7 @@ const { uploadRoom, uploadGallery, cloudinary } = require('./config/cloudinary')
 // Import auth middleware and routes
 const authMiddleware = require('./middleware/auth');
 const authRoutes = require('./routes/auth');
+const settingsRoutes = require('./routes/settings');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,6 +42,9 @@ const Review = require('./models/Review');
 
 // Auth Routes (public - no middleware)
 app.use('/api/auth', authRoutes);
+
+// Settings Routes (public GET, protected PUT/DELETE)
+app.use('/api/settings', settingsRoutes);
 
 // Routes
 

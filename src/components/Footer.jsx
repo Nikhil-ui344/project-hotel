@@ -1,6 +1,27 @@
-import { Hotel, MapPin, Phone, Mail, Instagram, Facebook, Clock } from 'lucide-react'
+import { Hotel, MapPin, Phone, Mail, Instagram, Clock } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import API_URL from '../config/api'
 
 const Footer = () => {
+  const [contactEmail, setContactEmail] = useState('admin@komalgarden.com');
+
+  useEffect(() => {
+    fetchContactEmail();
+  }, []);
+
+  const fetchContactEmail = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/settings/contactEmail`);
+      if (response.ok) {
+        const data = await response.json();
+        setContactEmail(data.value);
+      }
+    } catch (error) {
+      console.error('Failed to fetch contact email:', error);
+      // Keep default email if fetch fails
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
@@ -17,7 +38,7 @@ const Footer = () => {
           <div className="footer-links">
             <p className="footer-contact-item"><MapPin className="footer-icon" /> Chenduru (Thattihalli Cross), Bangalore Hyderabad Road, Near Bagepalli, Chikkaballapura (D)</p>
             <p className="footer-contact-item"><Phone className="footer-icon" /> +91 97391 22444, +91 70191 99999</p>
-            <p className="footer-contact-item"><Mail className="footer-icon" /> reservations@grandluxe.com</p>
+            <p className="footer-contact-item"><Mail className="footer-icon" /> {contactEmail}</p>
           </div>
         </div>
         <div>
@@ -34,7 +55,6 @@ const Footer = () => {
             <a href="https://www.instagram.com/komal._.garden?igsh=MWpmZ2J5N3o4aHM5Yg==" target="_blank" rel="noopener noreferrer" className="social-link">
               <Instagram size={20} />
             </a>
-            <a href="#" className="social-link"><Facebook size={20} /></a>
           </div>
         </div>
       </div>
