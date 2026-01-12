@@ -32,7 +32,27 @@ app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/komal_garden_db')
-.then(() => console.log('MongoDB Connected'))
+.then(async () => {
+  console.log('MongoDB Connected');
+  
+  // Auto-initialize settings if they don't exist
+  const Settings = require('./models/Settings');
+  try {
+    const contactEmail = await Settings.findOne({ key: 'contactEmail' });
+    if (!contactEmail) {
+      await Settings.create({
+        key: 'contactEmail',
+        value: 'info@komalgarden.com',
+        description: 'Contact email displayed on website'
+      });
+      console.log('✓ Default contact email initialized: info@komalgarden.com');
+    } else {
+      console.log('✓ Contact email settings already exist');
+    }
+  } catch (err) {
+    console.error('Error initializing settings:', err);
+  }
+})
 .catch(err => console.log(err));
 
 // Models
