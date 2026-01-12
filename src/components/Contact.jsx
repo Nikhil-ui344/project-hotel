@@ -6,7 +6,7 @@ import Footer from './Footer'
 import API_URL from '../config/api'
 
 const Contact = () => {
-  const [contactEmail, setContactEmail] = useState('admin@komalgarden.com');
+  const [contactEmail, setContactEmail] = useState('info@komalgarden.com');
 
   useEffect(() => {
     fetchContactEmail();

@@ -18,12 +18,12 @@ const initSettings = async () => {
       // Create default contact email setting
       const contactEmail = new Settings({
         key: 'contactEmail',
-        value: 'reservations@komalgarden.com',
+        value: 'info@komalgarden.com',
         description: 'Contact email displayed on website'
       });
 
       await contactEmail.save();
-      console.log('Default contact email created: reservations@komalgarden.com');
+      console.log('Default contact email created: info@komalgarden.com');
     }
 
     console.log('Settings initialization complete!');

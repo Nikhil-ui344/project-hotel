@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import API_URL from '../config/api'
 
 const Footer = () => {
-  const [contactEmail, setContactEmail] = useState('admin@komalgarden.com');
+  const [contactEmail, setContactEmail] = useState('info@komalgarden.com');
 
   useEffect(() => {
     fetchContactEmail();
