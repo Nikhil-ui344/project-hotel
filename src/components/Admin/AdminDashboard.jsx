@@ -616,12 +616,97 @@ const RoomManager = () => {
     }
   };
 
+  // Function to compress image if it's larger than 9MB
+  const compressImage = async (file) => {
+    const maxSize = 9 * 1024 * 1024; // 9MB
+    
+    // If file is already under 9MB, return it as is
+    if (file.size <= maxSize) {
+      return file;
+    }
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate target quality to stay close to 9MB
+          const sizeRatio = maxSize / file.size;
+          let quality = Math.max(0.85, Math.min(0.95, sizeRatio * 1.1));
+          
+          // Only resize if drastically over size (more than 50% over)
+          if (file.size > maxSize * 1.5) {
+            const scale = Math.sqrt(maxSize * 1.2 / file.size);
+            width = Math.floor(width * scale);
+            height = Math.floor(height * scale);
+          }
+          
+          // Set canvas dimensions
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert canvas to blob with compression
+          canvas.toBlob(
+            (blob) => {
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+      };
+    });
+  };
+
+  const handleFileWithCompression = async (file) => {
+    if (file) {
+      try {
+        // Compress the image first
+        const processedFile = await compressImage(file);
+        
+        // Check if compressed file is still too large
+        if (processedFile.size > 10 * 1024 * 1024) {
+          alert('Image is too large even after compression. Please use a smaller image or compress it manually.');
+          return;
+        }
+        
+        setSelectedFile(processedFile);
+        setPreviewUrl(URL.createObjectURL(processedFile));
+        
+        // Log size reduction info for debugging
+        if (file.size > 9 * 1024 * 1024) {
+          const originalSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+          const compressedSizeMB = (processedFile.size / (1024 * 1024)).toFixed(2);
+          console.log(`Room image compressed from ${originalSizeMB}MB to ${compressedSizeMB}MB`);
+        }
+      } catch (error) {
+        console.error('Error compressing image:', error);
+        alert('Error processing image. Please try again.');
+      }
+    }
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
-      handleFile(file);
+      handleFileWithCompression(file);
     }
   };
 
@@ -844,7 +929,7 @@ const RoomManager = () => {
                   accept="image/*"
                   className="d-none"
                   disabled={editingRoom}
-                  onChange={(e) => handleFile(e.target.files?.[0])}
+                  onChange={(e) => handleFileWithCompression(e.target.files?.[0])}
                 />
                 {previewUrl ? (
                   <img src={previewUrl} alt="Preview" style={{ maxWidth: '400px', height: '200px', objectFit: 'cover', borderRadius: '12px' }} className="img-fluid border" />
